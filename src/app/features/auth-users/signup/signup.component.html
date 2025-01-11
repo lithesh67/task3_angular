@@ -1,0 +1,60 @@
+<div class="container-fluid vh-100">
+    <div class="row h-100">
+        <div class="col-sm-6 d-flex justify-content-center align-items-center">
+            <div class="w-75">
+                <h2>Sign up</h2>
+                <p class="text-muted">Start your 30-day free trial.</p>
+                <form class="form-group mx-auto" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+                    <!-- firstName -->
+                    <div class="mb-1">
+                        <label class="form-label small" for="firstName">First name*</label>
+                        <input type="text" class="form-control w-75 small" id="firstName" placeholder="Enter your first name"
+                            formControlName="firstName">
+                        <p class="text-danger small" *ngIf="signupForm.get('firstName')?.invalid && signupForm.get('firstName')?.touched">
+                            {{fieldRequired}} </p>
+                    </div>
+                    <!-- lastname -->
+                    <div class="mb-1">
+                        <label class="form-label small" for="lastName">Last name*</label>
+                        <input type="text" class="form-control w-75" id="lastName" placeholder="Enter your last name"
+                            formControlName="lastName">
+                        <p class="text-danger small" *ngIf="signupForm.get('lastName')?.invalid && signupForm.get('lastName')?.touched">
+                            {{fieldRequired}}</p>
+                    </div>
+                    <!-- email -->
+                    <div class="mb-1">
+                        <label class="form-label small" for="email">Email*</label>
+                        <input type="text" class="form-control w-75" id="email" placeholder="Enter your email"
+                            formControlName="email">
+                        <div class="text-danger small" *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
+                            <p *ngIf="signupForm.get('email')?.errors?.['pattern'] else emailError">Enter valid email</p>
+                            <ng-template #emailError><p>{{fieldRequired}}</p></ng-template>
+                        </div>
+                    </div>
+                    <!-- password -->
+                    <div class="mb-1">
+                        <label class="form-label small" for="password">Password*</label>
+                        <input type="password" class="form-control w-75" id="password" placeholder="Create a password"
+                            formControlName="password">
+                        <div class="text-danger small" *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
+                            <p *ngIf="signupForm.get('password')?.errors?.['minlength'] ; else fieldError">Must be atleast 8 characters</p>
+                            <ng-template #fieldError><p >{{fieldRequired}}</p></ng-template>
+                        </div>
+                        
+                    </div>
+                    <!-- submit -->
+                    <input type="submit" class="btn btn-primary w-75" value="Create account"
+                        [disabled]="signupForm.invalid"><br><br>
+                </form>
+                
+                <span class="text-muted small">Already have an account?</span> <a [routerLink]="['/auth/login']">Log in</a>
+            
+            </div>
+        </div>
+        <div class="col-sm-6 p-0">
+            <img src="https://c1.wallpaperflare.com/preview/835/250/537/office-desk-computer-light.jpg" alt="img"
+                class="img-fluid h-100 w-100" style="object-fit: cover;">
+        </div>
+    </div>
+
+</div>

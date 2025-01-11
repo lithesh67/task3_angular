@@ -1,0 +1,32 @@
+<div class="container-fluid vh-100">
+    <div class="row h-100">
+        <div class="col-sm-6 d-flex justify-content-center align-items-center">
+            <div class="w-75">
+            <h2>Log in</h2>
+            <p class="text-muted">Welcome back! Please enter your details.</p>
+            <form class="form-group mx-auto" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <label class="form-label small" for="identity_input">Username/Email</label>
+                <input type="text" class="form-control w-75" id="identity_input" placeholder="Enter your Email or username" formControlName="identifier"><br>
+
+                <div *ngIf="loginForm.get('identifier')?.invalid && loginForm.get('identifier')?.touched">
+                    <p class="text-danger small">This field is required</p>
+                </div>
+
+                <label class="form-label small" for="password">Password</label>
+                <input type="password" class="form-control w-75"  id="password" placeholder="Enter password" formControlName="password"><br>
+
+                <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                    <p class="text-danger small">This field is required</p>
+                </div>
+
+                <input type="submit" class="btn btn-primary w-75" value="Sign in" [disabled]="loginForm.invalid"><br><br>
+            </form>
+            <span class="text-muted small">Don't have an account?</span> <a [routerLink]="['/auth/signup']">Sign up</a>
+            </div> 
+        </div>
+        <div class="col-sm-6 p-0">
+                <img src="https://wallpapers.com/images/hd/simple-office-background-jesgln5fm0iei20x.jpg" alt="img" class="img-fluid h-100 w-100" style="object-fit: cover;">
+        </div>
+    </div>
+
+</div>
