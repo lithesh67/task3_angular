@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SignupService } from '../services/signup.service';
 
 @Component({
   selector: 'app-signup',
@@ -8,7 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class SignupComponent implements OnInit {
   fieldRequired:string="This field is required"
-  constructor() { }
+  constructor(private signupService:SignupService) { }
 
   ngOnInit(): void {
   }
@@ -21,6 +22,13 @@ export class SignupComponent implements OnInit {
   })
   
   onSubmit(){
-
+    this.signupService.onSignup(this.signupForm.value).subscribe((resp:any)=>{
+      if(resp.bool==true){
+        alert("user registered successfully");
+      }
+      else{
+        alert(resp.message);
+      }
+    });
   }
 }

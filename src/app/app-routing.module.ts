@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './features/auth-users/login/login.component';
 
 const routes: Routes = [
   {
@@ -11,6 +10,10 @@ const routes: Routes = [
   {
     path:'auth',
     loadChildren:()=>import('./features/auth-users/auth-users.module').then(module=>module.AuthUsersModule),
+  },
+  {
+    path:'dashboard',
+    loadChildren:()=>import('./features/dashboard/dashboard.module').then(module=>module.DashboardModule),
   }
 ];
 

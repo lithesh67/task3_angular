@@ -1,0 +1,19 @@
+<div class="dropdown pl-5">
+    <div class="btn custom-btn d-flex align-items-center px-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" role="button">
+        <img  *ngIf="profile_pic else firstLetter" src=" " alt="img" class="rounded-circle me-3" height="30" width="30">
+        <ng-template #firstLetter>
+            <div class="rounded-circle" style="width:40px;height: 40px; background-color: black;">
+               <h3 style="color:white;">{{username?.charAt(0)| uppercase}}</h3>
+            </div>
+       </ng-template>
+        <div class="d-flex flex-column align-items-start pl-5">
+          <div class="m-0 text" style="color: black;">{{username}}</div>
+          <div class="m-0 text-muted">{{email}}</div>
+        </div>
+    </div>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="#">{{username}}</a></li>
+      <li><a class="dropdown-item" href="#">#update profile</a></li>
+      <li><div class="dropdown-item" (click)="onLogout()">Logout</div></li>
+    </ul>
+</div>
