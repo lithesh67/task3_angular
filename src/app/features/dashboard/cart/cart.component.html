@@ -1,0 +1,33 @@
+<div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"> <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheckmain" autocomplete="off">
+            <label for="btncheckmain">Product name</label></th>
+        <th scope="col">Category</th>
+        <th scope="col">Vendors</th>
+        <th scope="col">Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let product of cart" class="text-sm">
+            <td>
+                <div class="d-flex">
+                <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheck" autocomplete="off">
+                <img src="" alt="" class="rounded-circle" height="10" width="10" *ngIf="product.pruduct_image else firstLetter">
+                <ng-template #firstLetter>
+                    <div class="rounded-circle me-2" style="width:20px;height: 20px; background-color: rgb(186, 152, 206);">
+                       <h6 class="px-1" style="color:white;">{{product.product_name?.charAt(0)| uppercase}}</h6>
+                    </div>
+               </ng-template>
+                {{product.product_name}}
+                </div>
+            </td>
+                
+            <td>{{product.category}}</td>
+            <td>{{product.vendors}}</td>
+    
+          </tr>
+    </tbody>
+  </table>
+</div>

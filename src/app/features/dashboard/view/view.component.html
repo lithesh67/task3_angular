@@ -1,0 +1,49 @@
+<div class="d-flex flex-column">
+    <div>
+        <table class="table table-light table-hover">
+            <thead>
+              <tr>
+                <th scope="col"> <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheckmain" autocomplete="off">
+                    <label for="btncheckmain">Product name</label></th>
+                <th scope="col">Status</th>
+                <th scope="col">Category</th>
+                <th scope="col">Vendors</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Unit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of tableData; let i=index" class="text-sm">
+                <td>
+                    <div class="d-flex">
+                    <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheck" autocomplete="off" [checked]="checkboxes[product.product_id]" (change)="addToCart($event,i,product.product_id)">
+                    <img src="" alt="" class="rounded-circle" height="10" width="10" *ngIf="product.pruduct_image else firstLetter">
+                    <ng-template #firstLetter>
+                        <div class="rounded-circle me-2" style="width:20px;height: 20px; background-color: rgb(186, 152, 206);">
+                           <h6 class="px-1" style="color:white;">{{product.product_name?.charAt(0)| uppercase}}</h6>
+                        </div>
+                   </ng-template>
+                    {{product.product_name}}
+                    </div>
+                </td>
+                    
+                <td>
+                    <p *ngIf="product.quantity_in_stock!=0 else soldOut">Available</p>
+                    <ng-template #soldOut><p>Sold Out</p></ng-template>
+                </td>
+                <td>{{product.category}}</td>
+                <td>{{product.vendors}}</td>
+                <td>{{product.quantity_in_stock}}</td>
+                <td>{{product.measure}}</td>
+        
+              </tr>
+            </tbody>
+          </table>
+    </div>
+
+    <div class="d-flex px-2 justify-content-between">
+        <button class="btn btn-outline-dark btn-sm p-0.4" [disabled]="current_page==1" (click)="pageEvent(current_page-1)"> &lt; Previous</button>
+        <button class="btn btn-outline-dark btn-sm p-0.4" [disabled]="tableData.length<pageSize" (click)="pageEvent(current_page+1)"> Next &gt;</button>
+    </div>
+</div>
+

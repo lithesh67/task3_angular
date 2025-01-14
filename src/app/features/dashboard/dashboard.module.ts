@@ -7,6 +7,10 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FilesComponent } from './files/files.component';
 import { ProfileComponent } from './profile/profile.component';
 import { MainComponent } from './main/main.component';
+import { ViewComponent } from './view/view.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CartComponent } from './cart/cart.component';
 
 
 @NgModule({
@@ -15,11 +19,15 @@ import { MainComponent } from './main/main.component';
     NavbarComponent,
     FilesComponent,
     ProfileComponent,
-    MainComponent
+    MainComponent,
+    ViewComponent,
+    CartComponent
   ],
   imports: [
     CommonModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule
   ]
 })
 export class DashboardModule { }

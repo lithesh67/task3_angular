@@ -1,14 +1,138 @@
 <div class="d-flex flex-column">
-    <div class="d-flex justify-content-between mt-3 px-2">
-      <div><h5>Inventory movements</h5></div>
-      <div>
-        <button class="btn btn-outline-dark mx-1" >Move to cart</button>
-        <button class="btn btn-outline-dark mx-1">Download all</button>
-        <button class="btn btn-outline-dark mx-1">
-            <img class="px-1" src="../../../../assets/images/upload_cloud_white.svg" alt="">Import
-        </button>
-        <button class="btn mx-1" style="background-color: rgb(143, 66, 216); color:white;">+ Add product</button>
+  <div class="d-flex justify-content-between mt-3 px-2">
+    <div><h5>Inventory movements</h5></div>
+    
+    <div>
+      <button class="btn btn-outline-dark mx-1">Move to cart</button>
+      <button class="btn btn-outline-dark mx-1">Download all</button>
+      <button class="btn btn-outline-dark mx-1"  data-bs-toggle="modal" data-bs-target="#import">
+        <img class="px-1" src="../../../../assets/images/upload_cloud_white.svg" alt=""/>
+        Import
+      </button>
+      <button class="btn mx-1" style="background-color: rgb(143, 66, 216); color: white"
+              data-bs-toggle="modal" data-bs-target="#addProduct"> 
+        + Add product
+      </button>
+    </div>
+  </div>
+ 
+
+  <div class="d-flex justify-content-between mt-3 px-2">
+    <div>
+      <button class="btn btn-outline-dark btn-sm">View all</button>
+      <button class="btn btn-outline-dark btn-sm">Cart</button>
+    </div>
+
+    <div class="px-3">
+      <div>search bar and filter</div>
+    </div>
+  </div>
+
+  <div>
+     <app-view></app-view>
+  </div>
+</div>
+
+
+
+<!-- Modals -->
+
+<div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content m-0">
+      <div class="modal-header m-1">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add product</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body m-1">
+        <form class="form-group mx-auto m-1" [formGroup]="productForm">
+  
+          <label class="form-label small m-1" for="productName" style="font-size: 0.85rem;">Product name</label>
+          <input type="text" class="form-control w-60 m-1" id="productName" placeholder="Enter product name" formControlName="productName">
+          
+          <div class="mb-3 m-1">
+            <label for="category" class="form-label small" style="font-size: 0.85rem;">Select category</label>
+            <select class="form-select w-60" id="category"  style="font-size: 0.85rem;" formControlName="category">
+              <option selected disabled>Choose a category</option>
+              <option value="1">v</option>
+              <option value="2">vdv</option>
+              <option value="3">b</option>
+              <option value="4">c</option>
+              <option value="5">dv</option>
+            </select>
+          </div>
+
+          <div class="mb-3 m-1">
+            <label for="vendorSelect" class="form-label small" style="font-size: 0.85rem;">Select Vendor</label>
+            <select class="form-select w-60" id="vendorSelect" style="font-size: 0.85rem;" formControlName="vendor">
+              <option selected disabled>Choose a vendor</option>
+              <option value="1">Amazon</option>
+              <option value="2">Zepto</option>
+              <option value="3">Big Basket</option>
+              <option value="4">Blinkit</option>
+              <option value="5">Swiggy</option>
+            </select>
+          </div>
+
+          <label class="form-label small m-1" for="stock" style="font-size: 0.85rem;">Quantity in stock</label>
+          <input type="text" class="form-control w-60 m-1" id="stock" placeholder="Enter quantity" formControlName="quantity">
+
+          <label class="form-label small m-1" for="stock" style="font-size: 0.85rem;">Unit</label>
+          <input type="text" class="form-control w-60 m-1" id="stock" placeholder="Enter unit" formControlName="measure">
+        
+        
+        
+          <div class="mb-3">
+            <label for="statusSelect" class="form-label small m-1" style="font-size: 0.85rem;">Select Status</label>
+            <select class="form-select w-60 m-1" id="statusSelect" name="status" style="font-size: 0.85rem;" formControlName="status">
+              <option selected disabled>Choose a status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="pending">Pending</option>
+              <option value="suspended">Suspended</option>
+            </select>
+          </div>
+          
+          <div class="d-flex flex-column justify-content-center" >
+            <label class="form-label small">Upload product image</label><br>
+            <div class=" d-flex justify-content-center">
+            <label width="60" height="40">
+              <img src="../../../../assets/images/upload_cloud_white.svg" width="30">
+              <input type="file" hidden formControlName="uploadImg">
+            </label>
+            </div>
+          </div>
+      
+        </form>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-dark" [disabled]="productForm.invalid">Add product</button>
       </div>
     </div>
-    
+  </div>
+</div>
+
+
+<!-- Modal for Import -->
+<div class="modal fade" id="import" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title fs-5" id="exampleModalLabel">Upload and attach files</h2><br>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label>
+          <img src="../../../../assets/images/upload_cloud_white.svg" atl="img">
+          <input type="file" hidden>
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
