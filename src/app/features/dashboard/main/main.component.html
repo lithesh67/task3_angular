@@ -2,8 +2,8 @@
   <div class="d-flex justify-content-between mt-3 px-2">
     <div><h5>Inventory movements</h5></div>
     
-    <div>
-      <button class="btn btn-outline-dark mx-1">Move to cart</button>
+    <div *ngIf="toggle==='view'">
+      <button class="btn btn-outline-dark mx-1"  data-bs-toggle="modal" data-bs-target="#cart" (click)="onClickingMove()">Move to cart</button>
       <button class="btn btn-outline-dark mx-1">Download all</button>
       <button class="btn btn-outline-dark mx-1"  data-bs-toggle="modal" data-bs-target="#import">
         <img class="px-1" src="../../../../assets/images/upload_cloud_white.svg" alt=""/>
@@ -19,8 +19,8 @@
 
   <div class="d-flex justify-content-between mt-3 px-2">
     <div>
-      <button class="btn btn-outline-dark btn-sm">View all</button>
-      <button class="btn btn-outline-dark btn-sm">Cart</button>
+      <button class="btn btn-outline-dark btn-sm" (click)="toggle='view'">View all</button>
+      <button class="btn btn-outline-dark btn-sm" (click)="toggle='cart'">Cart</button>
     </div>
 
     <div class="px-3">
@@ -29,13 +29,17 @@
   </div>
 
   <div>
-     <app-view></app-view>
+     <app-view *ngIf="toggle==='view'"></app-view>
+     <app-cart *ngIf="toggle==='cart'"></app-cart>
   </div>
+
+ 
 </div>
 
 
 
 <!-- Modals -->
+<!-- Add product modal -->
 
 <div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm modal-dialog-centered">
@@ -53,36 +57,30 @@
           <div class="mb-3 m-1">
             <label for="category" class="form-label small" style="font-size: 0.85rem;">Select category</label>
             <select class="form-select w-60" id="category"  style="font-size: 0.85rem;" formControlName="category">
-              <option selected disabled>Choose a category</option>
-              <option value="1">v</option>
-              <option value="2">vdv</option>
-              <option value="3">b</option>
-              <option value="4">c</option>
-              <option value="5">dv</option>
+              <option value="" selected disabled>Choose a category</option>
+              <option *ngFor="let category of categories" [value]="category.category"> {{category.category}}</option>
             </select>
           </div>
 
           <div class="mb-3 m-1">
             <label for="vendorSelect" class="form-label small" style="font-size: 0.85rem;">Select Vendor</label>
             <select class="form-select w-60" id="vendorSelect" style="font-size: 0.85rem;" formControlName="vendor">
-              <option selected disabled>Choose a vendor</option>
-              <option value="1">Amazon</option>
-              <option value="2">Zepto</option>
-              <option value="3">Big Basket</option>
-              <option value="4">Blinkit</option>
-              <option value="5">Swiggy</option>
+              <option  value="" selected disabled>Choose a vendor</option>
+              <option *ngFor="let vendor of vendors" [value]="vendor.vendor_name">{{vendor.vendor_name}}</option>
             </select>
           </div>
 
           <label class="form-label small m-1" for="stock" style="font-size: 0.85rem;">Quantity in stock</label>
           <input type="text" class="form-control w-60 m-1" id="stock" placeholder="Enter quantity" formControlName="quantity">
 
-          <label class="form-label small m-1" for="stock" style="font-size: 0.85rem;">Unit</label>
-          <input type="text" class="form-control w-60 m-1" id="stock" placeholder="Enter unit" formControlName="measure">
+          <label class="form-label small m-1" for="unit" style="font-size: 0.85rem;">Unit</label>
+          <input type="text" class="form-control w-60 m-1" id="unit" placeholder="Enter unit" formControlName="measure">
+          
+          <label class="form-label small m-1" for="price" style="font-size: 0.85rem;">Price</label>
+          <input type="text" class="form-control w-60 m-1" id="price" placeholder="Enter unit" formControlName="price">
         
         
-        
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label for="statusSelect" class="form-label small m-1" style="font-size: 0.85rem;">Select Status</label>
             <select class="form-select w-60 m-1" id="statusSelect" name="status" style="font-size: 0.85rem;" formControlName="status">
               <option selected disabled>Choose a status</option>
@@ -91,16 +89,15 @@
               <option value="pending">Pending</option>
               <option value="suspended">Suspended</option>
             </select>
-          </div>
+          </div> -->
           
-          <div class="d-flex flex-column justify-content-center" >
-            <label class="form-label small">Upload product image</label><br>
-            <div class=" d-flex justify-content-center">
-            <label width="60" height="40">
+          <label class="form-label small">Upload product image</label><br>
+          <div class="d-flex justify-content-center file-upload-box border" >
+            <label class="w-100  d-flex flex-column py-2 justify-content-center align-items-center">
               <img src="../../../../assets/images/upload_cloud_white.svg" width="30">
-              <input type="file" hidden formControlName="uploadImg">
+              <input class="position-absolute" type="file" hidden formControlName="uploadImg" height="40">
+              <p class="text-muted text-sm small">Click here to upload</p>
             </label>
-            </div>
           </div>
       
         </form>
@@ -108,7 +105,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-outline-dark" [disabled]="productForm.invalid">Add product</button>
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" [disabled]="productForm.invalid" (click)="onAddingProduct()">Add product</button>
       </div>
     </div>
   </div>
@@ -124,10 +121,15 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <label>
-          <img src="../../../../assets/images/upload_cloud_white.svg" atl="img">
-          <input type="file" hidden>
-        </label>
+        <label class="form-label small">Upload product image</label><br>
+        <div class="d-flex justify-content-center file-upload-box border" >
+          <label class="w-100  d-flex flex-column py-2 justify-content-center align-items-center">
+            <img src="../../../../assets/images/upload_cloud_white.svg" width="30">
+            <input class="position-absolute" type="file" hidden height="40">
+            <p class="text-muted text-sm small">Click here to upload</p>
+          </label>
+        
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -136,3 +138,61 @@
     </div>
   </div>
 </div>
+
+
+<!-- Move to cart modal -->
+
+<div class="modal fade" id="cart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title fs-5" id="exampleModalLabel">Move to cart</h2><br>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-light table-hover">
+          <thead>
+            <tr>
+              <th scope="col"> <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheckmain" autocomplete="off">
+                  <label for="btncheckmain">Product name</label></th>
+              <th scope="col">Created At</th>
+              <th scope="col">Category</th>
+              <th scope="col">Vendors</th>
+              <th scope="col">Quantity</th>
+             
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of moveCartData; let i=index" class="text-sm">
+              <td>
+                  <div class="d-flex">
+                  <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheck" autocomplete="off" (change)="onCheckChange($event,i,product.product_id)">
+                  <img src="" alt="" class="rounded-circle" height="10" width="10" *ngIf="product.pruduct_image else firstLetter">
+                  <ng-template #firstLetter>
+                      <div class="rounded-circle me-2" style="width:20px;height: 20px; background-color: rgb(186, 152, 206);">
+                         <h6 class="px-1" style="color:white;">{{product.product_name?.charAt(0)| uppercase}}</h6>
+                      </div>
+                 </ng-template>
+                  {{product.product_name}}
+                  </div>
+              </td>
+                  
+              <td>{{product.created_at | date:'dd-MM-yyyy hh:mm a'}}</td>
+              <td>{{product.category}}</td>
+              <td>{{product.vendors}}</td>
+              <td>{{product.quantity_in_stock}}</td>
+      
+      
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="onSavingChanges()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

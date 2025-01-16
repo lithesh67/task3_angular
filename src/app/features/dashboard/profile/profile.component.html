@@ -1,6 +1,6 @@
 <div class="dropdown pl-5">
     <div class="btn custom-btn d-flex align-items-center px-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" role="button">
-        <img  *ngIf="profile_pic else firstLetter" src=" " alt="img" class="rounded-circle me-3" height="30" width="30">
+        <img  *ngIf="profile_pic else firstLetter" [src]="profile_pic" alt="img" class="rounded-circle me-3" height="30" width="30">
         <ng-template #firstLetter>
             <div class="rounded-circle" style="width:40px;height: 40px; background-color: black;">
                <h3 style="color:white;">{{username?.charAt(0)| uppercase}}</h3>
@@ -13,7 +13,37 @@
     </div>
     <ul class="dropdown-menu">
       <li><a class="dropdown-item" href="#">{{username}}</a></li>
-      <li><a class="dropdown-item" href="#">#update profile</a></li>
+      <li><button class="dropdown-item"  data-bs-toggle="modal" data-bs-target="#updateProfile" >update profile</button></li>
       <li><button class="dropdown-item" (click)="onLogout()">Logout</button></li>
     </ul>
+</div>
+
+
+<!-- Modals -->
+
+<div class="modal fade" id="updateProfile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title fs-5" id="exampleModalLabel">Update profile picture</h2><br>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="imageForm">
+        <label class="form-label small">Upload product image</label><br>
+        <div class="d-flex justify-content-center file-upload-box border" >
+          <label class="w-100  d-flex flex-column py-2 justify-content-center align-items-center">
+            <img src="../../../../assets/images/upload_cloud_white.svg" width="30">
+            <input class="position-absolute" type="file" hidden  height="40" (change)="onSelectingFile($event)" formControlName="image">
+            <p class="text-muted text-sm small">Click here to upload</p>
+          </label>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="uploadImage()" [disabled]="imageForm.invalid">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>

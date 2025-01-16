@@ -9,9 +9,13 @@ import { ViewService } from '../services/view.service';
 export class CartComponent implements OnInit {
 
   constructor(private viewService:ViewService) { }
-  cart:any=[]
+  cart:any=[];
   ngOnInit(): void {
-    this.cart=this.viewService.moveToCart;
+    this.getCart();
+  }
+
+  getCart(){
+    this.cart=this.viewService.mainCart;
   }
 
 }
