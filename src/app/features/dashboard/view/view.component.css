@@ -1,3 +1,25 @@
 .c_custom{
     border-color: rgb(138, 136, 136);
 }
+
+.soldOut{
+  color:rgb(31, 30, 30);
+  background-color: rgb(236, 234, 234);
+  display:inline-block
+}
+
+.available{
+  color:green;
+  background-color: rgb(208, 245, 208);
+  display: inline-block;
+}
+
+.numbers{
+  color:gray;
+  background-color: rgb(223, 222, 222);
+}
+
+.vendors{
+  color:rgb(134, 73, 192);
+  background-color: rgb(229, 213, 245) ;
+}

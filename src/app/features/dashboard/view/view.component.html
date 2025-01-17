@@ -10,14 +10,15 @@
                 <th scope="col">Vendors</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Unit</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let product of tableData; let i=index" class="text-sm">
+              <tr *ngFor="let product of tableData; let i=index" class="text-sm small m-0 p-0">
                 <td>
                     <div class="d-flex">
                     <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheck" autocomplete="off" [disabled]="cartProductIds[product.product_id]" [checked]="checkboxes[product.product_id]" (change)="addToCart($event,i,product.product_id)">
-                    <img src="" alt="" class="rounded-circle" height="10" width="10" *ngIf="product.pruduct_image else firstLetter">
+                    <img [src]="product.product_image" alt="" class="rounded-circle me-2" height="25" width="25" *ngIf="product.product_image else firstLetter">
                     <ng-template #firstLetter>
                         <div class="rounded-circle me-2" style="width:20px;height: 20px; background-color: rgb(186, 152, 206);">
                            <h6 class="px-1" style="color:white;">{{product.product_name?.charAt(0)| uppercase}}</h6>
@@ -28,13 +29,27 @@
                 </td>
                     
                 <td>
-                    <p *ngIf="product.quantity_in_stock!=0 else soldOut">Available</p>
-                    <ng-template #soldOut><p>Sold Out</p></ng-template>
+                    <p *ngIf="product.quantity_in_stock!=0 else soldOut" class="border rounded-3 px-2 available ">&#8226; Available</p>
+                    <ng-template #soldOut><p class="border rounded-3 px-1 soldOut">&#8226; Sold Out</p></ng-template>
                 </td>
                 <td>{{product.category}}</td>
-                <td>{{product.vendors}}</td>
+                <td class="d-flex">
+                  <div *ngFor="let vendor of product.vendors.split(',');let i=index">
+                     <p class="text-sm small mt-1 px-1 mx-1 border rounded-3 vendors" *ngIf="i<3">{{vendor}}</p>
+                  </div>
+                  <p *ngIf="product.vendors.split(',').length>3" class="text-sm small mt-1 px-1 mx-1 border numbers rounded-3">+{{product.vendors.split(',').length-3}}</p>
+                </td>
                 <td>{{product.quantity_in_stock}}</td>
-                <td>{{product.measure}}</td>
+                <td>
+                    <p>{{product.measure}}</p>
+                </td>
+                <td class="p-2">
+                  <div class="d-flex justify-content-between">
+                    <img class="btn p-0 m-0" height="30" width="30" src="../../../../assets/images/download.svg">
+                    <img class="btn p-0 m-0" height="30" width="30" (click)="onDeleteRequest(product.product_id,product.vendor_id)" src="../../../../assets/images/delete.svg" data-bs-toggle="modal" data-bs-target="#deleteButton">
+                    <img class="btn p-0 mt-2" height="17" width="17" src="../../../../assets/images/edit.svg">
+                  </div>
+                </td>
         
               </tr>
             </tbody>
@@ -45,5 +60,26 @@
         <button class="btn btn-outline-dark btn-sm p-0.4" [disabled]="current_page==1" (click)="pageEvent(current_page-1)"> &lt; Previous</button>
         <button class="btn btn-outline-dark btn-sm p-0.4" [disabled]="current_page==totalPages" (click)="pageEvent(current_page+1)"> Next &gt;</button>
     </div>
+</div>
+
+
+<!-- Delete modal -->
+
+<div class="modal fade" id="deleteButton" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Product</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this product? This cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="onConfirmingDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
 </div>
 

@@ -53,14 +53,14 @@ export class MainComponent implements OnInit {
 
   onAddingProduct(){
     const obj={productName:this.productForm.controls.productName.value,
-               category: this.productForm.controls.category.value,
-               vendor:this.productForm.controls.vendor.value,
+               category_id: this.productForm.controls.category.value,
+               vendor_id:this.productForm.controls.vendor.value,
                quantity:this.productForm.controls.quantity.value,
                measure:this.productForm.controls.measure.value,
                price:this.productForm.controls.price.value
     }
     this.mainService.onAddingProduct(obj).subscribe((resp:any)=>{
-       if(resp.bool==true && this.file){
+      if(resp.bool===true && this.file){
          this.mainService.addImageForProduct(resp.product_id,this.file);
        }
     });
@@ -73,6 +73,7 @@ export class MainComponent implements OnInit {
     for (let [key,value] of Object.entries(this.viewService.viewSelected)) {
       if(!this.viewService.cartProductIds[key]){
          this.moveCartData.push(value);
+         this.moveCartData.at(-1).selectedQuantity=1;    
       }
     }
   }
@@ -96,7 +97,14 @@ export class MainComponent implements OnInit {
     }
     console.log(this.viewService.mainCart);
     this.tempCart=[];
-    
-  }
+}
+
+increase(index:number){
+  this.moveCartData[index].selectedQuantity+=1;
+}
+
+decrease(index:number){
+  this.moveCartData[index].selectedQuantity+=-1;
+}
 
 }

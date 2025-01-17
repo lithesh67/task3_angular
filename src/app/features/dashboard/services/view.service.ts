@@ -28,5 +28,9 @@ export class ViewService {
     this.cartProductIds={};
   }
 
+  onConfirmingDelete(product_id:number,vendor_id:number){
+    return this.http.delete(`${this.apiUrl}/deleteProduct?product_id=${product_id}&vendor_id=${vendor_id}`);
+  }
+
 
 }

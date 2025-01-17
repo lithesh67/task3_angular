@@ -10,7 +10,7 @@
       </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let product of cart" class="text-sm">
+        <tr *ngFor="let product of cart;let i=index" class="text-sm">
             <td>
                 <div class="d-flex">
                 <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheck" autocomplete="off">
@@ -25,9 +25,18 @@
             </td>
                 
             <td>{{product.category}}</td>
-            <td>{{product.vendors}}</td>
-            <td>{{product.quantity_in_stock}} changeable</td>
-    
+            <td class="d-flex">
+              <div *ngFor="let vendor of product.vendors.split(',');let i=index">
+                 <p class="text-sm small mt-1 px-1 mx-1 border rounded-3 vendors" *ngIf="i<3">{{vendor}}</p>
+              </div>
+              <p *ngIf="product.vendors.split(',').length>3" class="text-sm small mt-1 px-1 mx-1 border numbers rounded-3">+{{product.vendors.split(',').length-3}}</p>
+            </td>
+            <td>
+            <td>
+              <button class="btn btn-outline-dark rounded-2 px-1 py-1 border" (click)="increase(i)" [disabled]="product.selectedQuantity==product.quantity_in_stock">+</button>
+              {{product.selectedQuantity }}
+              <button class="btn  btn-outline-dark px-1 py-1 border" (click)="decrease(i)" [disabled]="product.selectedQuantity==0">-</button>
+            </td>    
           </tr>
     </tbody>
   </table>

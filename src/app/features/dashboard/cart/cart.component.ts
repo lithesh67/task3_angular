@@ -18,4 +18,12 @@ export class CartComponent implements OnInit {
     this.cart=this.viewService.mainCart;
   }
 
+  increase(i:number){
+
+  }
+
+  decrease(i:number){
+    
+  }
+
 }

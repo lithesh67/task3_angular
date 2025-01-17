@@ -29,10 +29,10 @@ export class MainService {
       this.fileService.uploadToServer(url,file).subscribe({
         next:(resp:any)=>{
           console.log("Uploaded successfully");
-          this.storeTheUrlOfImage(url).subscribe((resp:any)=>{
+          this.storeTheUrlOfImage(url,product_id).subscribe((resp:any)=>{
             console.log("saved in database");
             console.log(resp);
-            return resp;
+            
           });
         },
       })
@@ -40,9 +40,9 @@ export class MainService {
    }
 
 
-storeTheUrlOfImage(longUrl:string){
+storeTheUrlOfImage(longUrl:string,product_id:number){
    const url=longUrl.split('?')[0];
-   return this.http.post(`${this.apiUrl}/uploadProductImage`,{url});
+   return this.http.post(`${this.apiUrl}/uploadProductImage`,{url,product_id});
 }
 
 }

@@ -13,6 +13,8 @@ export class ViewComponent implements OnInit {
   tableData:any= [];
   checkboxes:any=[];
   cartProductIds:any=[];
+  deleteId:any;
+  vendorId:any;
   constructor(private viewService:ViewService) { }
 
   ngOnInit(): void {
@@ -46,9 +48,21 @@ export class ViewComponent implements OnInit {
       }
       console.log(this.viewService.viewSelected);
       console.log(this.checkboxes);
-      
-      
-   }
+    }
+
+  onDeleteRequest(product_id:number,vendor_id:number){
+    this.deleteId=product_id;
+    this.vendorId=vendor_id;
   }
+
+  onConfirmingDelete(){
+     this.viewService.onConfirmingDelete(this.deleteId,this.vendorId).subscribe((resp:any)=>{
+        if(resp.bool===true){
+           this.getItems();
+        }
+     });
+  }
+
+}
 
 
