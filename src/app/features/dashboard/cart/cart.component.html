@@ -26,16 +26,15 @@
                 
             <td>{{product.category}}</td>
             <td class="d-flex">
-              <div *ngFor="let vendor of product.vendors.split(',');let i=index">
+              <div *ngFor="let vendor of product.vendors.split(',')">
                  <p class="text-sm small mt-1 px-1 mx-1 border rounded-3 vendors" *ngIf="i<3">{{vendor}}</p>
               </div>
               <p *ngIf="product.vendors.split(',').length>3" class="text-sm small mt-1 px-1 mx-1 border numbers rounded-3">+{{product.vendors.split(',').length-3}}</p>
             </td>
             <td>
-            <td>
-              <button class="btn btn-outline-dark rounded-2 px-1 py-1 border" (click)="increase(i)" [disabled]="product.selectedQuantity==product.quantity_in_stock">+</button>
-              {{product.selectedQuantity }}
-              <button class="btn  btn-outline-dark px-1 py-1 border" (click)="decrease(i)" [disabled]="product.selectedQuantity==0">-</button>
+              <button class="btn btn-outline-dark rounded-2 px-1 py-1 border" (click)="increase(i,product.product_id)" [disabled]="product.selectedQuantity==product.quantity_in_stock">+</button>
+              {{ getAbsolute(product.selectedQuantity) }}
+              <button class="btn  btn-outline-dark px-1 py-1 border" (click)="decrease(i,product.product_id)" [disabled]="product.selectedQuantity==0">-</button>
             </td>    
           </tr>
     </tbody>

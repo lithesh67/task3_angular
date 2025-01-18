@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ViewService } from '../services/view.service';
 import { MainService } from '../services/main.service';
 import { FilesService } from '../services/files.service';
+import { downloadExcel } from 'src/app/core/utils/excel';
 
 
 @Component({
@@ -73,7 +74,7 @@ export class MainComponent implements OnInit {
     for (let [key,value] of Object.entries(this.viewService.viewSelected)) {
       if(!this.viewService.cartProductIds[key]){
          this.moveCartData.push(value);
-         this.moveCartData.at(-1).selectedQuantity=1;    
+         this.moveCartData.at(-1).selectedQuantity=-1;    
       }
     }
   }
@@ -91,20 +92,63 @@ export class MainComponent implements OnInit {
   }
 
   onSavingChanges(){
-    for (let [key,value] of Object.entries(this.tempCart)){
-      this.viewService.mainCart.push(value);
-      this.viewService.cartProductIds[key]=true;
-    }
-    console.log(this.viewService.mainCart);
-    this.tempCart=[];
-}
+    this.viewService.mainCart=this.viewService.getCart();
+    this.mainService.updateSelectedQuantity(this.tempCart).subscribe({
+      next:(resp)=>{
+        console.log(resp);
+        for (let [key,value] of Object.entries(this.tempCart)){
+          if(this.viewService.mainCart[key]){
+            this.viewService.mainCart[key].selectedQuantity+=this.tempCart[key].selectedQuantity;
+          }
+          else{
+            this.viewService.mainCart[key]=this.tempCart[key];
+          }
+          this.viewService.cartProductIds[key]=true;
+        } 
+        this.viewService.setCart(this.viewService.mainCart);
+        console.log(this.viewService.mainCart);
+        this.tempCart=[];
+      },
+      error:(err)=>{
+        console.log(err);
+        alert("Some error occured while updating,try again");        
+      }
 
-increase(index:number){
-  this.moveCartData[index].selectedQuantity+=1;
-}
+    })
+  }
 
-decrease(index:number){
-  this.moveCartData[index].selectedQuantity+=-1;
-}
+   increase(index:number,product_id:number){
+     this.moveCartData[index].selectedQuantity+=-1;
+     if(this.tempCart[product_id]){
+      this.tempCart[product_id]=this.moveCartData[index];
+     }
+   }
+
+   decrease(index:number,product_id:number){
+     this.moveCartData[index].selectedQuantity+=1;
+     if(this.tempCart[product_id]){
+      this.tempCart[product_id]=this.moveCartData[index];
+     }
+   }
+
+   absolute(quantity:number){
+     return Math.abs(quantity);
+   }
+
+   downloadAll(){
+     let data=[];
+     const selectedCount = Object.keys(this.viewService.viewSelected).length;
+     if(this.viewService.tick){
+       this.mainService.fetchAll().subscribe((resp:any)=>{
+          downloadExcel(resp.result);
+       })
+     }
+     else{
+        for(let value of Object.values(this.viewService.viewSelected)){
+          data.push(value);
+        }
+        downloadExcel(data);
+     }
+   }
 
 }

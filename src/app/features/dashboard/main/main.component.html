@@ -4,7 +4,7 @@
     
     <div *ngIf="toggle==='view'">
       <button class="btn btn-outline-dark mx-1"  data-bs-toggle="modal" data-bs-target="#cart" (click)="onClickingMove()">Move to cart</button>
-      <button class="btn btn-outline-dark mx-1">Download all</button>
+      <button class="btn btn-outline-dark mx-1" (click)="downloadAll()">Download all</button>
       <button class="btn btn-outline-dark mx-1"  data-bs-toggle="modal" data-bs-target="#import">
         <img class="px-1" src="../../../../assets/images/upload_cloud_white.svg" alt=""/>
         Import
@@ -186,9 +186,9 @@
                 <p *ngIf="product.vendors.split(',').length>3" class="text-sm small mt-1 px-1 mx-1 border numbers rounded-3">+{{product.vendors.split(',').length-3}}</p>
               </td>
               <td>
-                <button class="btn btn-outline-dark rounded-2 px-1 py-1 border" (click)="increase(i)" [disabled]="product.selectedQuantity==product.quantity_in_stock">+</button>
-                {{product.selectedQuantity }}
-                <button class="btn  btn-outline-dark px-1 py-1 border" (click)="decrease(i)" [disabled]="product.selectedQuantity==0">-</button>
+                <button class="btn btn-outline-dark rounded-2 px-1 py-1 border" (click)="increase(i,product.product_id)" [disabled]="product.selectedQuantity==product.quantity_in_stock">+</button>
+                {{ absolute(product.selectedQuantity) }}
+                <button class="btn  btn-outline-dark px-1 py-1 border" (click)="decrease(i,product.product_id)" [disabled]="product.selectedQuantity==0">-</button>
               </td>
           </tr>
           </tbody>

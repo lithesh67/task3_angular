@@ -3,7 +3,7 @@
         <table class="table table-light table-hover">
             <thead>
               <tr>
-                <th scope="col"> <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheckmain" autocomplete="off">
+                <th scope="col"> <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheckmain" autocomplete="off" (change)="tickAll($event)">
                     <label for="btncheckmain">Product name</label></th>
                 <th scope="col">Status</th>
                 <th scope="col">Category</th>
@@ -17,7 +17,7 @@
               <tr *ngFor="let product of tableData; let i=index" class="text-sm small m-0 p-0">
                 <td>
                     <div class="d-flex">
-                    <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheck" autocomplete="off" [disabled]="cartProductIds[product.product_id]" [checked]="checkboxes[product.product_id]" (change)="addToCart($event,i,product.product_id)">
+                    <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheck" autocomplete="off" [disabled]="cartProductIds[product.product_id]" [checked]="(checkboxes[product.product_id] ) || tick" (change)="addToCart($event,i,product.product_id)">
                     <img [src]="product.product_image" alt="" class="rounded-circle me-2" height="25" width="25" *ngIf="product.product_image else firstLetter">
                     <ng-template #firstLetter>
                         <div class="rounded-circle me-2" style="width:20px;height: 20px; background-color: rgb(186, 152, 206);">
@@ -45,8 +45,8 @@
                 </td>
                 <td class="p-2">
                   <div class="d-flex justify-content-between">
-                    <img class="btn p-0 m-0" height="30" width="30" src="../../../../assets/images/download.svg">
-                    <img class="btn p-0 m-0" height="30" width="30" (click)="onDeleteRequest(product.product_id,product.vendor_id)" src="../../../../assets/images/delete.svg" data-bs-toggle="modal" data-bs-target="#deleteButton">
+                    <img class="btn p-0 m-0" height="30" width="30" src="../../../../assets/images/download.svg" (click)="downloadPDF(i)">
+                    <img class="btn p-0 m-0" height="30" width="30" (click)="onDeleteRequest(product.product_id)" src="../../../../assets/images/delete.svg" data-bs-toggle="modal" data-bs-target="#deleteButton">
                     <img class="btn p-0 mt-2" height="17" width="17" src="../../../../assets/images/edit.svg">
                   </div>
                 </td>

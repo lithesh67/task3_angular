@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { FilesService } from './files.service';
-import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -39,10 +38,23 @@ export class MainService {
     });
    }
 
+  storeTheUrlOfImage(longUrl:string,product_id:number){
+    const url=longUrl.split('?')[0];
+    return this.http.post(`${this.apiUrl}/uploadProductImage`,{url,product_id});
+  }
 
-storeTheUrlOfImage(longUrl:string,product_id:number){
-   const url=longUrl.split('?')[0];
-   return this.http.post(`${this.apiUrl}/uploadProductImage`,{url,product_id});
-}
+  updateSelectedQuantity(tempCart:any){
+     const tempCartArray=[];
+     for(let value of Object.values(tempCart)){
+       tempCartArray.push(value);
+     }
+     return this.http.patch(`${this.apiUrl}/updateQuantity`,{tempCartArray});
+  }
+
+  fetchAll(){
+     return this.http.get(`${this.apiUrl}/fetchAll`);
+  }
+
+
 
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewService } from '../services/view.service';
+import { generatePDF } from 'src/app/core/utils/pdf';
 
 @Component({
   selector: 'app-view',
@@ -15,6 +16,7 @@ export class ViewComponent implements OnInit {
   cartProductIds:any=[];
   deleteId:any;
   vendorId:any;
+  tick:any=false;
   constructor(private viewService:ViewService) { }
 
   ngOnInit(): void {
@@ -25,6 +27,7 @@ export class ViewComponent implements OnInit {
     this.viewService.getTableData(this.current_page,this.pageSize).subscribe((resp:any)=>{
        this.tableData=resp.tableData;
        this.totalPages=Math.ceil(((resp.count)/this.pageSize));
+       this.viewService.count=resp.count;
        this.viewService.tableData=this.tableData;
        this.checkboxes=this.viewService.viewcheckboxes;
        this.cartProductIds=this.viewService.cartProductIds;
@@ -50,17 +53,33 @@ export class ViewComponent implements OnInit {
       console.log(this.checkboxes);
     }
 
-  onDeleteRequest(product_id:number,vendor_id:number){
+  onDeleteRequest(product_id:number){
     this.deleteId=product_id;
-    this.vendorId=vendor_id;
   }
 
   onConfirmingDelete(){
-     this.viewService.onConfirmingDelete(this.deleteId,this.vendorId).subscribe((resp:any)=>{
+     this.viewService.onConfirmingDelete(this.deleteId).subscribe((resp:any)=>{
         if(resp.bool===true){
            this.getItems();
         }
      });
+  }
+
+  downloadPDF(index:number){
+    generatePDF(this.tableData[index]);
+  }
+
+  tickAll(event:Event){
+    const checked=event.target as HTMLInputElement;
+    if(checked){
+      this.tick=true;
+      this.viewService.tick=true;
+    }
+    else{
+      this.tick=false;
+      this.viewService.tick=false;
+    }
+
   }
 
 }

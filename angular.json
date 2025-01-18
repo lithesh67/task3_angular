@@ -29,7 +29,14 @@
             "scripts": [
               "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
-            ]
+            ],
+            "allowedCommonJsDependencies": [
+              "canvg",
+              "jspdf-autotable",
+              "raf",
+              "rgbcolor",
+              "core-js"
+            ] 
           },
           "configurations": {
             "production": {
