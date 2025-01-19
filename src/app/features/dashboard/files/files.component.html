@@ -1,7 +1,7 @@
 <div class="d-flex flex-column p-1">
    <div class="m-2">Files Upload</div>
    <div class="d-flex mx-2">
-     <button class="btn btn-outline-dark">Download all</button>
+     <button class="btn btn-outline-dark" (click)="downloadZipFiles()">Download all</button>
      <button class="btn px-2 ms-1" style="background-color: blueviolet; color: white;"
          data-bs-toggle="modal" data-bs-target="#fileUpload">
         <img class="p-1" src="../../../../assets/images/upload-cloud.svg">Upload
@@ -12,7 +12,7 @@
     <table class="table table-light table-hover">
       <thead>
         <tr>
-          <th scope="col"> <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheckmain" autocomplete="off">
+          <th scope="col"> <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheckmain" autocomplete="off" (change)="tickAll($event)">
               <label for="btncheckmain">File name</label></th>
         </tr> 
         <!-- files table -->
@@ -21,7 +21,7 @@
         <tr *ngFor="let file of fileData; let i=index" class="text-sm">
           <td>
             <div class="d-flex m-0 p-0">
-              <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheck" autocomplete="off">
+              <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheck" autocomplete="off" [checked]="tick" (change)="onCheckChange($event,i)">
               <img src="" alt="" class="rounded-circle" height="10" width="10" *ngIf="file.file_image else firstLetter">
               <ng-template #firstLetter>
                   <div class="rounded-circle me-2 m-1 p-0" style="width:20px;height: 20px; background-color: rgb(186, 152, 206);">

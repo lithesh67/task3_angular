@@ -18,7 +18,8 @@ export class MainComponent implements OnInit {
   categories:any=[];
   vendors:any=[];
   file:any;
-
+  filterCols:any[]=[];
+  text:string="";
   constructor(private viewService:ViewService,private mainService:MainService,private fileService:FilesService) { }
  
   getCategories_vendors(){
@@ -60,6 +61,8 @@ export class MainComponent implements OnInit {
                measure:this.productForm.controls.measure.value,
                price:this.productForm.controls.price.value
     }
+    console.log(obj);
+    
     this.mainService.onAddingProduct(obj).subscribe((resp:any)=>{
       if(resp.bool===true && this.file){
          this.mainService.addImageForProduct(resp.product_id,this.file);
@@ -151,4 +154,18 @@ export class MainComponent implements OnInit {
      }
    }
 
+  filterChange(event:Event,column:string){
+    const checked=(event.target as HTMLInputElement).checked;
+    if(checked){
+      this.filterCols.push(column);
+    }
+    else{
+      this.filterCols=this.filterCols.filter(col=>col!=column);
+    }
+    this.viewService.selectedCols=this.filterCols;
+  }
+
+  onSearch(event:Event){
+    this.text=(event.target as HTMLInputElement).value;
+  }
 }

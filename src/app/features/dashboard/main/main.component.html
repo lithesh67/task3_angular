@@ -24,12 +24,24 @@
     </div>
 
     <div class="px-3">
-      <div>search bar and filter</div>
+      <div class="d-flex justify-content-between">
+        <input type="text" class="form-control p-0 m-0" placeholder="Search" aria-label="search" aria-describedby="addon-wrapping" (change)="onSearch($event)">
+        <div class="dropdown">
+          <div class="btn"  type="button" data-bs-toggle="dropdown" aria-expanded="false" role="button">Filters</div>
+          <ul class="dropdown-menu text-sm small p-1">
+            <li><input type="checkbox" class="px-1" (change)="filterChange($event,'p.product_name')">Product name</li>
+            <li><input type="checkbox" class="px-1" (change)="filterChange($event,'c.category')">Category</li>
+            <li><input type="checkbox" class="px-1" (change)="filterChange($event,'v.vendor_name')">Vendors</li>
+            <li><input type="checkbox" class="px-1" (change)="filterChange($event,'p.quantity_in_stock')">Quantity</li>
+            <li><input type="checkbox" class="px-1" (change)="filterChange($event,'p.measure')">Unit</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 
   <div>
-     <app-view *ngIf="toggle==='view'"></app-view>
+     <app-view [text]="text" *ngIf="toggle==='view'"></app-view>
      <app-cart *ngIf="toggle==='cart'"></app-cart>
   </div>
 

@@ -1,22 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ViewService } from '../services/view.service';
 import { generatePDF } from 'src/app/core/utils/pdf';
+import { log } from 'console';
 
 @Component({
   selector: 'app-view',
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.css']
 })
-export class ViewComponent implements OnInit {
+export class ViewComponent implements OnInit,OnChanges {
   pageSize:number=6;
   current_page:number=1;
   totalPages:number=0;
   tableData:any= [];
-  checkboxes:any=[];
+  checkboxes:any={};
   cartProductIds:any=[];
   deleteId:any;
   vendorId:any;
   tick:any=false;
+  @Input() text="";
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['text'].currentValue && this.viewService.selectedCols.length!=0){
+      this.viewService.onSearch(changes['text'].currentValue,this.pageSize,this.current_page).subscribe((resp:any)=>{
+        this.tableData=resp.tableData;
+        
+      })
+    }
+  }
   constructor(private viewService:ViewService) { }
 
   ngOnInit(): void {
@@ -33,6 +43,7 @@ export class ViewComponent implements OnInit {
        this.cartProductIds=this.viewService.cartProductIds;
     });
   }
+
 
   pageEvent(current_page:number){
      this.current_page=current_page;
@@ -70,14 +81,16 @@ export class ViewComponent implements OnInit {
   }
 
   tickAll(event:Event){
-    const checked=event.target as HTMLInputElement;
+    const checked=(event.target as HTMLInputElement).checked;
     if(checked){
       this.tick=true;
       this.viewService.tick=true;
+      
     }
     else{
       this.tick=false;
       this.viewService.tick=false;
+      
     }
 
   }

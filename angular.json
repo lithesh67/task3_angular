@@ -35,7 +35,9 @@
               "jspdf-autotable",
               "raf",
               "rgbcolor",
-              "core-js"
+              "core-js",
+              "file-saver",
+              "jszip"
             ] 
           },
           "configurations": {
