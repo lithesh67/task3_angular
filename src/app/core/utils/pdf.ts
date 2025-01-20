@@ -22,7 +22,5 @@ export function generatePDF(product:any): void {
       ],
       startY: 40
     });
-
-    // Save the PDF
     doc.save(`${product.product_name}_${product.product_id}`);
 }

@@ -47,7 +47,7 @@
                   <div class="d-flex justify-content-between">
                     <img class="btn p-0 m-0" height="30" width="30" src="../../../../assets/images/download.svg" (click)="downloadPDF(i)">
                     <img class="btn p-0 m-0" height="30" width="30" (click)="onDeleteRequest(product.product_id)" src="../../../../assets/images/delete.svg" data-bs-toggle="modal" data-bs-target="#deleteButton">
-                    <img class="btn p-0 mt-2" height="17" width="17" src="../../../../assets/images/edit.svg">
+                    <img class="btn p-0 mt-2" height="17" width="17" src="../../../../assets/images/edit.svg" (click)="onClickingEdit(product)" data-bs-toggle="modal" data-bs-target="#editProduct">
                   </div>
                 </td>
         
@@ -78,6 +78,76 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="onConfirmingDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- edit modal -->
+
+<div class="modal fade" id="editProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content m-0">
+      <div class="modal-header m-1">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit product</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body m-1">
+        <form class="form-group mx-auto m-1" [formGroup]="editForm">
+  
+          <label class="form-label small m-1" for="productName" style="font-size: 0.85rem;">Product name</label>
+          <input type="text" class="form-control w-60 m-1" id="productName" placeholder="Enter product name" formControlName="productName">
+          
+          <div class="mb-3 m-1">
+            <label for="category" class="form-label small" style="font-size: 0.85rem;">Select category</label>
+            <select class="form-select w-60" id="category"  style="font-size: 0.85rem;" formControlName="category">
+              <option [value]="liveEditing.category_id" selected>{{liveEditing.category}}(present category)</option>
+              <option *ngFor="let category of categories" [value]="category.category_id"> {{category.category}}</option>
+            </select>
+          </div>
+
+          <div class="mb-3 m-1">
+            <label for="vendorSelect" class="form-label small" style="font-size: 0.85rem;">Select Vendor</label>
+            <select class="form-select w-60" id="vendorSelect" style="font-size: 0.85rem;" formControlName="vendor" (change)="vendorChange($event)">
+              <option  value="" selected disabled>Choose a vendor</option>
+              <option *ngFor="let vendor of vendors" [value]="vendor.vendor_name">{{vendor.vendor_name}}</option>
+            </select>
+            <div class="mt-3">
+              <div class="d-flex flex-wrap">
+                <div *ngFor="let vendor of selectedArray;let i = index" class="me-2 mb-2">
+                  <span *ngIf="selectedVendors[vendor]" class="border p-1 rounded text-small status-grey">
+                    {{ vendor }}
+                    <button class="btn btn-sm" (click)="removeVendors(vendor)">x</button>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <label class="form-label small m-1" for="stock" style="font-size: 0.85rem;">Quantity in stock</label>
+          <input type="text" class="form-control w-60 m-1" id="stock" placeholder="Enter quantity" formControlName="quantity">
+
+          <label class="form-label small m-1" for="unit" style="font-size: 0.85rem;">Unit</label>
+          <input type="text" class="form-control w-60 m-1" id="unit" placeholder="Enter unit" formControlName="measure">
+          
+          <label class="form-label small m-1" for="price" style="font-size: 0.85rem;">Price</label>
+          <input type="text" class="form-control w-60 m-1" id="price" placeholder="Enter unit" formControlName="price">
+          
+          <label class="form-label small">Upload product image</label><br>
+          <div class="d-flex justify-content-center file-upload-box border" >
+            <label class="w-100  d-flex flex-column py-2 justify-content-center align-items-center">
+              <img src="../../../../assets/images/upload_cloud_white.svg" width="30">
+              <input class="position-absolute" type="file" hidden formControlName="uploadImg" height="40" (change)="onFileSelected($event)">
+              <p class="text-muted text-sm small">Click here to upload</p>
+            </label>
+          </div>
+      
+        </form>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" [disabled]="editForm.invalid" (click)="onConfirmingEdit(liveEditing.product_id)">Add product</button>
       </div>
     </div>
   </div>

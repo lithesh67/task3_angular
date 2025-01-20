@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { FilesService } from './files.service';
 
 @Injectable({
   providedIn:'root'
@@ -17,7 +18,9 @@ export class ViewService {
   public count:number=0;
   public tick:any=false;
   public selectedCols:any=[];
-  constructor(private http:HttpClient) { }
+  public vendors:any=[];
+  public categories:any=[];
+  constructor(private http:HttpClient,private fileService:FilesService) { }
 
   getTableData(current_page:number,pageSize:number):Observable<any>{
     return this.http.get(`${this.apiUrl}/dashboard?page=${current_page}&limit=${pageSize}`);
@@ -56,5 +59,15 @@ export class ViewService {
     }
     return this.http.get(`${this.apiUrl}/search?text=${text}&pageSize=${pageSize}&current_page=${current_page}${queries}`);
   }
+
+  onImporting(newData:any){
+    return this.http.post(`${this.apiUrl}/importData`,{newData});
+  }
+
+  confirmEdit(product_id:number,vendorArray:any,obj:any){
+    return this.http.post(`${this.apiUrl}/editProduct`,{product_id,vendorArray,obj})
+  }
+
+
 
 }

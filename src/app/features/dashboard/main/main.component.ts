@@ -4,7 +4,7 @@ import { ViewService } from '../services/view.service';
 import { MainService } from '../services/main.service';
 import { FilesService } from '../services/files.service';
 import { downloadExcel } from 'src/app/core/utils/excel';
-
+import { importFile } from 'src/app/core/utils/import';
 
 @Component({
   selector: 'app-main',
@@ -18,14 +18,18 @@ export class MainComponent implements OnInit {
   categories:any=[];
   vendors:any=[];
   file:any;
+  fileImport:any;
   filterCols:any[]=[];
   text:string="";
+  newTable:any=[];
   constructor(private viewService:ViewService,private mainService:MainService,private fileService:FilesService) { }
  
   getCategories_vendors(){
     this.mainService.getCategories_vendors().subscribe((resp:any)=>{
       this.categories=resp.categories;
       this.vendors=resp.vendors;
+      this.viewService.vendors=resp.vendors;
+      this.viewService.categories=resp.categories;
     });
   }
    
@@ -61,8 +65,6 @@ export class MainComponent implements OnInit {
                measure:this.productForm.controls.measure.value,
                price:this.productForm.controls.price.value
     }
-    console.log(obj);
-    
     this.mainService.onAddingProduct(obj).subscribe((resp:any)=>{
       if(resp.bool===true && this.file){
          this.mainService.addImageForProduct(resp.product_id,this.file);
@@ -168,4 +170,16 @@ export class MainComponent implements OnInit {
   onSearch(event:Event){
     this.text=(event.target as HTMLInputElement).value;
   }
+  
+  importFileSelected(event:Event){
+    const input=event.target as HTMLInputElement;
+    if(input.files){
+       this.fileImport=input.files[0];
+    }
+  }
+
+  async importFileAsData(){
+    this.newTable=await importFile(this.fileImport);
+  }
+
 }

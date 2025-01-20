@@ -1,7 +1,8 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ViewService } from '../services/view.service';
 import { generatePDF } from 'src/app/core/utils/pdf';
-import { log } from 'console';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MainService } from '../services/main.service';
 
 @Component({
   selector: 'app-view',
@@ -18,16 +19,41 @@ export class ViewComponent implements OnInit,OnChanges {
   deleteId:any;
   vendorId:any;
   tick:any=false;
+  vendors:any=[];
+  categories:any=[];
+  liveEditing:any={};
+  editFile:any;
+  selectedVendors:any={};
+  selectedArray:any=[];
   @Input() text="";
+  @Input() newTable=[];
+  
+  editForm=new FormGroup({
+       productName : new FormControl('',[Validators.required]),
+       category    : new FormControl('',[Validators.required]),
+       vendor      : new FormControl('',[Validators.required]),
+       quantity    : new FormControl('',[Validators.required]),
+       measure     : new FormControl('',[Validators.required]),
+       price       : new FormControl('',[Validators.required]),
+       uploadImg   : new FormControl('')
+    });
+
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['text'].currentValue && this.viewService.selectedCols.length!=0){
+    if(changes['text']?.currentValue && this.viewService.selectedCols.length!=0){
       this.viewService.onSearch(changes['text'].currentValue,this.pageSize,this.current_page).subscribe((resp:any)=>{
         this.tableData=resp.tableData;
+      })
+    }
+
+    if(this.newTable.length>0){
+      this.viewService.onImporting(this.newTable).subscribe((resp:any)=>{
+        console.log(resp);
         
+        this.getItems();
       })
     }
   }
-  constructor(private viewService:ViewService) { }
+  constructor(private viewService:ViewService,private mainService:MainService) { }
 
   ngOnInit(): void {
      this.getItems();
@@ -92,7 +118,86 @@ export class ViewComponent implements OnInit,OnChanges {
       this.viewService.tick=false;
       
     }
+  }
 
+  onClickingEdit(obj:any){
+    this.liveEditing=obj;
+    this.selectedVendors={};
+    this.selectedArray=[];
+    this.categories=this.viewService.categories;
+    this.vendors=this.viewService.vendors;
+    this.categories=this.viewService.categories;
+    this.vendors=this.viewService.vendors;
+    let existingVendors=this.liveEditing.vendors.split(',');
+    for(let vendor of existingVendors){
+       this.selectedVendors[vendor]=true;
+    }
+    for(let vendor of Object.keys(this.selectedVendors)){
+      this.selectedArray.push(vendor);
+    }
+    
+    this.editForm.patchValue({
+      productName:this.liveEditing.product_name,
+      category:this.liveEditing.category_id,
+      quantity:this.liveEditing.quantity_in_stock,
+      measure:this.liveEditing.measure,
+      price:this.liveEditing.unit_price,
+    });
+    console.log(this.editForm.value);
+    
+  }
+
+
+
+  onConfirmingEdit(product_id:number){
+    const obj={productName:this.editForm.controls.productName.value,
+      category_id: this.editForm.controls.category.value,
+      quantity:this.editForm.controls.quantity.value,
+      measure:this.editForm.controls.measure.value,
+      price:this.editForm.controls.price.value
+    }
+    
+    let vendor_id_array=[];
+    for(let vendor of this.vendors){
+      if(this.selectedVendors[vendor.vendor_name]){
+        vendor_id_array.push(vendor.vendor_id);
+      }
+    }
+    this.viewService.confirmEdit(product_id,vendor_id_array,obj).subscribe((resp:any)=>{
+      console.log(resp);
+      if(this.editFile){
+        this.mainService.addImageForProduct(product_id,this.editFile);
+      }
+      else{
+        this.getItems();
+      }
+    });
+  }
+
+  onFileSelected(event:Event){
+     const input=(event.target as HTMLInputElement);
+     if(input.files){
+      this.editFile=input.files[0];
+     }
+  }
+
+  removeVendors(vendor:string){
+    delete this.selectedVendors[vendor];
+    this.selectedArray=[];
+    for(let vendor of Object.keys(this.selectedVendors)){
+      this.selectedArray.push(vendor);
+    }
+  }
+
+  vendorChange(event:Event){
+    const value=(event.target as HTMLSelectElement).value;
+    if(value){
+      this.selectedArray=[];
+      this.selectedVendors[value]=true;
+      for(let vendor of Object.keys(this.selectedVendors)){
+        this.selectedArray.push(vendor);
+      }
+    }
   }
 
 }
