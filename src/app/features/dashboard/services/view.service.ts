@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { FilesService } from './files.service';
 
@@ -67,6 +67,26 @@ export class ViewService {
   confirmEdit(product_id:number,vendorArray:any,obj:any){
     return this.http.post(`${this.apiUrl}/editProduct`,{product_id,vendorArray,obj})
   }
+
+  addImageForProduct(product_id:number,file:File):Observable<any>{
+    const fileName=file.name.replace(/\s+/g,'');
+    const fileType=file.type;
+    return this.fileService.getPresignedUrl(fileName,fileType).pipe(switchMap((resp:any)=>{
+      const url=resp.url;
+      return this.fileService.uploadToServer(url,file).pipe(switchMap((resp:any)=>{
+        console.log("Uploaded successfully");
+        return this.storeTheUrlOfImage(url,product_id)
+
+      }));
+    }));
+  }
+    
+
+  storeTheUrlOfImage(longUrl:string,product_id:number){
+    const url=longUrl.split('?')[0];
+    return this.http.post(`${this.apiUrl}/uploadProductImage`,{url,product_id});
+  }
+
 
 
 

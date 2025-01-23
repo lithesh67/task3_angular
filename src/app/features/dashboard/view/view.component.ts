@@ -166,7 +166,11 @@ export class ViewComponent implements OnInit,OnChanges {
     this.viewService.confirmEdit(product_id,vendor_id_array,obj).subscribe((resp:any)=>{
       console.log(resp);
       if(this.editFile){
-        this.mainService.addImageForProduct(product_id,this.editFile);
+        this.viewService.addImageForProduct(product_id,this.editFile).subscribe((resp:any)=>{
+          console.log("Saved in database");
+          console.log(resp);
+          this.getItems();
+      });
       }
       else{
         this.getItems();
