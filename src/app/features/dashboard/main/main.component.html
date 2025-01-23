@@ -192,10 +192,10 @@
               <td>{{product.created_at | date:'dd-MM-yyyy hh:mm a'}}</td>
               <td>{{product.category}}</td>
               <td class="d-flex">
-                <div *ngFor="let vendor of product.vendors.split(',');let i=index">
-                   <p class="text-sm small mt-1 px-1 mx-1 border rounded-3 vendors" *ngIf="i<3">{{vendor}}</p>
-                </div>
-                <p *ngIf="product.vendors.split(',').length>3" class="text-sm small mt-1 px-1 mx-1 border numbers rounded-3">+{{product.vendors.split(',').length-3}}</p>
+                <select class="py-1 m-1 rounded-2" (change)="selectingVendor($event,product.product_id,i)">
+                  <option selected>Select vendor</option>
+                  <option *ngFor="let vendor of product.vendors.split(',')">{{vendor}}</option>
+                </select>
               </td>
               <td>
                 <button class="btn btn-outline-dark rounded-2 px-1 py-1 border" (click)="increase(i,product.product_id)" [disabled]="product.selectedQuantity==product.quantity_in_stock">+</button>

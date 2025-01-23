@@ -20,7 +20,9 @@ export class CartComponent implements OnInit {
     console.log(this.viewService.mainCart);
     
     for(let [key,value] of Object.entries(this.viewService.mainCart)){
-       this.cart.push(value);
+       let temp:any=value;
+       temp['product_vendor']=key
+       this.cart.push(temp);
     }
   } 
 
@@ -28,14 +30,14 @@ export class CartComponent implements OnInit {
     this.viewService.setCart(this.viewService.mainCart);
   }
 
-  increase(i:number,product_id:number){
+  increase(i:number,product_id:number,product_vendor:string){
     console.log(this.cart[i],"before api call");
     this.cartService.updateQuantity(this.cart[i],-1).subscribe({
       next:(resp)=>{
         console.log(resp);
-        this.viewService.mainCart[product_id].selectedQuantity+=-1;
-        this.viewService.mainCart[product_id].quantity_in_stock+=-1;
-        this.cart[i]=this.viewService.mainCart[product_id];      
+        this.viewService.mainCart[product_vendor].selectedQuantity+=-1;
+        this.viewService.mainCart[product_vendor].quantity_in_stock+=-1;
+        this.cart[i]=this.viewService.mainCart[product_vendor];      
         this.viewService.setCart(this.viewService.mainCart);
       },
       error:(err)=>{
@@ -45,14 +47,14 @@ export class CartComponent implements OnInit {
     })
   }
 
-  decrease(i:number,product_id:number){
+  decrease(i:number,product_id:number,product_vendor:string){
     
     this.cartService.updateQuantity(this.cart[i],1).subscribe({
       next:(resp)=>{
         console.log(resp);
-        this.viewService.mainCart[product_id].selectedQuantity+=1;
-        this.viewService.mainCart[product_id].quantity_in_stock+=1;
-        this.cart[i]=this.viewService.mainCart[product_id];
+        this.viewService.mainCart[product_vendor].selectedQuantity+=1;
+        this.viewService.mainCart[product_vendor].quantity_in_stock+=1;
+        this.cart[i]=this.viewService.mainCart[product_vendor];
         this.viewService.setCart(this.viewService.mainCart);
       },
       error:(err)=>{

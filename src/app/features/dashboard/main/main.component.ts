@@ -22,6 +22,7 @@ export class MainComponent implements OnInit {
   filterCols:any[]=[];
   text:string="";
   newTable:any=[];
+  checkedBoxes:any={};
   constructor(private viewService:ViewService,private mainService:MainService,private fileService:FilesService) { }
  
   getCategories_vendors(){
@@ -79,25 +80,31 @@ export class MainComponent implements OnInit {
     for (let [key,value] of Object.entries(this.viewService.viewSelected)) {
       if(!this.viewService.cartProductIds[key]){
          this.moveCartData.push(value);
-         this.moveCartData.at(-1).selectedQuantity=-1;    
+         this.moveCartData.at(-1).selectedQuantity=-1;   
+         this.moveCartData.at(-1).selectedVendor=""; 
       }
     }
   }
 
   onCheckChange(event:Event,index:number,product_id:number){
     const checked=(event.target as HTMLInputElement).checked;
-    if(checked){
-      this.tempCart[product_id]=this.moveCartData[index];
+    let tempVendor=this.moveCartData[index].selectedVendor;
+    if(checked && tempVendor){
+      this.checkedBoxes[index]=true;
     }
     else{
-      delete this.tempCart[product_id];
+      delete this.checkedBoxes[index];
     }
-    console.log(this.tempCart);
     
   }
 
   onSavingChanges(){
     this.viewService.mainCart=this.viewService.getCart();
+    for(let index of Object.keys(this.checkedBoxes)){
+      let tempVendor=this.moveCartData[index].selectedVendor;
+      let tempProduct_id=this.moveCartData[index].product_id;
+      if(tempVendor){this.tempCart[tempProduct_id+tempVendor]=this.moveCartData[index];}
+    }
     this.mainService.updateSelectedQuantity(this.tempCart).subscribe({
       next:(resp)=>{
         console.log(resp);
@@ -113,6 +120,7 @@ export class MainComponent implements OnInit {
         this.viewService.setCart(this.viewService.mainCart);
         console.log(this.viewService.mainCart);
         this.tempCart=[];
+        this.checkedBoxes={};
       },
       error:(err)=>{
         console.log(err);
@@ -124,16 +132,15 @@ export class MainComponent implements OnInit {
 
    increase(index:number,product_id:number){
      this.moveCartData[index].selectedQuantity+=-1;
-     if(this.tempCart[product_id]){
-      this.tempCart[product_id]=this.moveCartData[index];
-     }
    }
 
    decrease(index:number,product_id:number){
      this.moveCartData[index].selectedQuantity+=1;
-     if(this.tempCart[product_id]){
-      this.tempCart[product_id]=this.moveCartData[index];
-     }
+   }
+
+   selectingVendor(event:Event,product_id:number,index:number){
+     const input=event.target as HTMLInputElement;
+     this.moveCartData[index].selectedVendor=input.value;
    }
 
    absolute(quantity:number){
