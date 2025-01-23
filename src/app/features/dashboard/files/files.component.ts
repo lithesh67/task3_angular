@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FilesService } from '../services/files.service';
 import { ZipService } from 'src/app/core/services/zip.service';
+import { SafeResourceUrl ,DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-files',
@@ -13,7 +14,10 @@ export class FilesComponent implements OnInit {
   fileData:any;
   tick:any=false;
   selectedFiles:any={};
-  constructor(private fileService:FilesService,private zipService:ZipService) { }
+  previewFileType:any;
+  previewFilePath:SafeResourceUrl | undefined
+  constructor(private fileService:FilesService,private zipService:ZipService,private sanitizer:DomSanitizer) { }
+
   
   getFiles(){
     this.fileService.getFiles().subscribe((resp:any)=>{
@@ -91,6 +95,38 @@ export class FilesComponent implements OnInit {
     if(files.length!=0){
       this.zipService.downloadZip(files); 
     }
+  }
+
+  reqFilePreview(fileRecord:any){
+    if(fileRecord.file_type.includes('application')){
+      this.previewFilePath=this.sanitizer.bypassSecurityTrustResourceUrl(`https://view.officeapps.live.com/op/embed.aspx?src=`+fileRecord.file_path);
+    }
+    else{
+    this.previewFilePath=this.sanitizer.bypassSecurityTrustResourceUrl(fileRecord.file_path);
+    }
+    this.previewFileType=fileRecord.file_type;
+  }
+
+  filetype(fileType:string):string{
+    if(!this.previewFileType){
+      return '';
+    }
+    if(fileType.includes('image')){
+      return 'image';
+    }
+    else if(fileType.includes('audio')){
+      return 'audio';
+    }
+    else if(fileType.includes('video')){
+      return 'video';
+    }
+    else if(fileType.includes('pdf')){
+      return 'pdf';
+    }
+    else if(fileType.includes('application')){
+      return 'application';
+    }
+    return 'application';
   }
 
 

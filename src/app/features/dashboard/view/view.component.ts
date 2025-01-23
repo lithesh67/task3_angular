@@ -25,6 +25,7 @@ export class ViewComponent implements OnInit,OnChanges {
   editFile:any;
   selectedVendors:any={};
   selectedArray:any=[];
+  pageButtons:any=[];
   @Input() text="";
   @Input() newTable=[];
   
@@ -48,7 +49,6 @@ export class ViewComponent implements OnInit,OnChanges {
     if(this.newTable.length>0){
       this.viewService.onImporting(this.newTable).subscribe((resp:any)=>{
         console.log(resp);
-        
         this.getItems();
       })
     }
@@ -63,6 +63,7 @@ export class ViewComponent implements OnInit,OnChanges {
     this.viewService.getTableData(this.current_page,this.pageSize).subscribe((resp:any)=>{
        this.tableData=resp.tableData;
        this.totalPages=Math.ceil(((resp.count)/this.pageSize));
+       this.generatePageButtons();
        this.viewService.count=resp.count;
        this.viewService.tableData=this.tableData;
        this.checkboxes=this.viewService.viewcheckboxes;
@@ -70,6 +71,22 @@ export class ViewComponent implements OnInit,OnChanges {
     });
   }
 
+  generatePageButtons(){
+     if(this.totalPages<5){
+       this.pageButtons=Array.from({length:this.totalPages},(_,i)=>i+1);
+       return;
+     }
+     if(!this.pageButtons.includes(this.current_page)){
+       if(this.totalPages-this.current_page+1<5){
+        this.pageButtons=Array.from({length:this.totalPages-this.current_page+1},(_,i)=>this.current_page+1);
+       }
+       else{
+        this.pageButtons=Array.from({length:5},(_,i)=>this.current_page+i);
+       }
+       
+     }
+     
+  }
 
   pageEvent(current_page:number){
      this.current_page=current_page;

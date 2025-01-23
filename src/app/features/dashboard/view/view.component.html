@@ -58,6 +58,9 @@
 
     <div class="d-flex px-2 justify-content-between">
         <button class="btn btn-outline-dark btn-sm p-0.4" [disabled]="current_page==1" (click)="pageEvent(current_page-1)"> &lt; Previous</button>
+        <div class="d-flex justify-content-center">
+          <button *ngFor="let pageNo of pageButtons;let i=index" class="btn btn-sm small text-muted px-3" [class.pageColor]="current_page==i" (click)="pageEvent(pageNo)">{{pageNo}}</button>
+        </div>
         <button class="btn btn-outline-dark btn-sm p-0.4" [disabled]="current_page==totalPages" (click)="pageEvent(current_page+1)"> Next &gt;</button>
     </div>
 </div>
