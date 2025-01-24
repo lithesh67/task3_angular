@@ -193,7 +193,7 @@
               <td>{{product.category}}</td>
               <td class="d-flex">
                 <select class="py-1 m-1 rounded-2" (change)="selectingVendor($event,product.product_id,i)">
-                  <option selected>Select vendor</option>
+                  <option selected value="">Select vendor</option>
                   <option *ngFor="let vendor of product.vendors.split(',')">{{vendor}}</option>
                 </select>
               </td>

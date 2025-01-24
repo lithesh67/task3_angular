@@ -78,18 +78,16 @@ export class MainComponent implements OnInit {
   onClickingMove(){
     this.moveCartData=[];
     for (let [key,value] of Object.entries(this.viewService.viewSelected)) {
-      if(!this.viewService.cartProductIds[key]){
          this.moveCartData.push(value);
          this.moveCartData.at(-1).selectedQuantity=-1;   
          this.moveCartData.at(-1).selectedVendor=""; 
-      }
     }
   }
 
   onCheckChange(event:Event,index:number,product_id:number){
     const checked=(event.target as HTMLInputElement).checked;
     let tempVendor=this.moveCartData[index].selectedVendor;
-    if(checked && tempVendor){
+    if(checked){
       this.checkedBoxes[index]=true;
     }
     else{
@@ -103,24 +101,40 @@ export class MainComponent implements OnInit {
     for(let index of Object.keys(this.checkedBoxes)){
       let tempVendor=this.moveCartData[index].selectedVendor;
       let tempProduct_id=this.moveCartData[index].product_id;
-      if(tempVendor){this.tempCart[tempProduct_id+tempVendor]=this.moveCartData[index];}
+      if(tempVendor){
+        this.tempCart[tempProduct_id+tempVendor]=this.moveCartData[index];
+        console.log(this.tempCart[tempProduct_id+tempVendor]);
+        // this.viewService.viewSelected[this.moveCartData[index].product_id].quantity_in_stock+=this.moveCartData[index].selectedQuantity;
+      }
+      console.log(this.tempCart);
+      
     }
     this.mainService.updateSelectedQuantity(this.tempCart).subscribe({
       next:(resp)=>{
         console.log(resp);
+        console.log(this.tempCart);
         for (let [key,value] of Object.entries(this.tempCart)){
           if(this.viewService.mainCart[key]){
+            this.viewService.mainCart[key].quantity_in_stock+=this.tempCart[key].selectedQuantity;
             this.viewService.mainCart[key].selectedQuantity+=this.tempCart[key].selectedQuantity;
           }
           else{
             this.viewService.mainCart[key]=this.tempCart[key];
+            this.viewService.mainCart[key].quantity_in_stock+=this.tempCart[key].selectedQuantity;
           }
-          this.viewService.cartProductIds[key]=true;
+          let depthProduct_id=this.viewService.mainCart[key].product_id;
+          for(let [uniqueKey,val] of Object.entries(this.viewService.mainCart)){
+            if(this.viewService.mainCart[uniqueKey].product_id==depthProduct_id){
+              this.viewService.mainCart[uniqueKey].quantity_in_stock=this.viewService.mainCart[key].quantity_in_stock;
+            }
+          }
+          this.viewService.cartProductIds[key]=true;      
         } 
         this.viewService.setCart(this.viewService.mainCart);
         console.log(this.viewService.mainCart);
-        this.tempCart=[];
+        this.tempCart={};
         this.checkedBoxes={};
+        this.moveCartData=[];
       },
       error:(err)=>{
         console.log(err);
@@ -140,7 +154,7 @@ export class MainComponent implements OnInit {
 
    selectingVendor(event:Event,product_id:number,index:number){
      const input=event.target as HTMLInputElement;
-     this.moveCartData[index].selectedVendor=input.value;
+     this.moveCartData[index].selectedVendor=input.value;    
    }
 
    absolute(quantity:number){

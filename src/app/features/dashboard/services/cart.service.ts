@@ -10,7 +10,9 @@ export class CartService {
   constructor(private http:HttpClient) 
   { }
   
-  updateQuantity(singleProduct:any,num:number){  
+  updateQuantity(singleProduct:any,num:number){ 
+    console.log(singleProduct);
+     
     const product_id=singleProduct.product_id;
     const quantity_in_stock=singleProduct.quantity_in_stock;
     const selectedQuantity=num;

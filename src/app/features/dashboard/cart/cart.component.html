@@ -1,5 +1,5 @@
 <div>
-  <table class="table">
+  <table class="table text-sm">
     <thead>
       <tr>
         <th scope="col"> <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheckmain" autocomplete="off">
@@ -10,7 +10,7 @@
       </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let product of cart;let i=index" class="text-sm">
+        <tr *ngFor="let product of cart;let i=index" class="text-sm small">
             <td>
                 <div class="d-flex">
                 <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheck" autocomplete="off">
@@ -26,7 +26,7 @@
                 
             <td>{{product.category}}</td>
             <td class="d-flex">
-               {{product.selectedVendor}}
+               <p class="text-sm small  px-1 mx-1 border rounded-3 vendors">{{product.selectedVendor}}</p>
             </td>
             <td>
               <button class="btn btn-outline-dark rounded-2 px-1 py-1 border" (click)="increase(i,product.product_id,product.product_vendor)" [disabled]="product.selectedQuantity==product.quantity_in_stock">+</button>
