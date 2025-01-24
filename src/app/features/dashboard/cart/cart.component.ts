@@ -1,18 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ViewService } from '../services/view.service';
 import { CartService } from '../services/cart.service';
-import { log } from 'console';
-import { main } from '@popperjs/core';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css']
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit,OnChanges {
 
   constructor(private viewService:ViewService,private cartService:CartService) { }
   cart:any=[];
+  @Input() text="";
+  @Input() toggle="";
+
+  ngOnChanges(changes: SimpleChanges){
+    console.log(changes['text'].currentValue);
+    
+    if(this.toggle=="cart" && this.viewService.selectedCols.length>1){
+      this.getCart();
+      let tempFilterCols=this.viewService.selectedCols;
+      if(tempFilterCols.includes('vendor_name')){
+        tempFilterCols.filter((col:any)=>{return col!='vendor_name'});
+        tempFilterCols.push('selectedVendor');
+      }
+      tempFilterCols.filter((col:any)=>{return col!='measure'});
+      this.cart.filter((item:any)=>{
+        let check=false;
+        for(let col of tempFilterCols){
+          if(item[col].toString().toLowerCase().includes(this.text.toLowerCase())){
+            check=true;
+            break;
+          }
+        }
+        return check;
+      });
+    }
+  }
+
   ngOnInit(): void {
     this.getCart();
   }

@@ -19,10 +19,11 @@ export class MainComponent implements OnInit {
   vendors:any=[];
   file:any;
   fileImport:any;
-  filterCols:any[]=[];
+  filterCols:any[]=['product_name','category','vendor_name','quantity_in_stock','measure'];
   text:string="";
   newTable:any=[];
   checkedBoxes:any={};
+  addFile_name:string='';
   constructor(private viewService:ViewService,private mainService:MainService,private fileService:FilesService) { }
  
   getCategories_vendors(){
@@ -31,6 +32,7 @@ export class MainComponent implements OnInit {
       this.vendors=resp.vendors;
       this.viewService.vendors=resp.vendors;
       this.viewService.categories=resp.categories;
+      this.viewService.selectedCols=this.filterCols;
     });
   }
    
@@ -54,6 +56,7 @@ export class MainComponent implements OnInit {
     const input=event.target as HTMLInputElement;
     if(input.files){
        this.file=input.files[0];
+       this.addFile_name=this.file.name;
     }
   }
 

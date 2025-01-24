@@ -26,13 +26,15 @@ export class ViewComponent implements OnInit,OnChanges {
   selectedVendors:any={};
   selectedArray:any=[];
   pageButtons:any=[];
+  editFile_name:string="";
   @Input() text="";
   @Input() newTable=[];
+  @Input() toggle="";
   
   editForm=new FormGroup({
        productName : new FormControl('',[Validators.required]),
        category    : new FormControl('',[Validators.required]),
-       vendor      : new FormControl('',[Validators.required]),
+       vendor      : new FormControl('',),
        quantity    : new FormControl('',[Validators.required]),
        measure     : new FormControl('',[Validators.required]),
        price       : new FormControl('',[Validators.required]),
@@ -40,9 +42,15 @@ export class ViewComponent implements OnInit,OnChanges {
     });
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['text']?.currentValue && this.viewService.selectedCols.length!=0){
+    if(this.viewService.selectedCols.length!=0 && this.toggle=="view"){
+      if(changes['text'].currentValue==""){
+        this.getItems();
+        return;
+      }
       this.viewService.onSearch(changes['text'].currentValue,this.pageSize,this.current_page).subscribe((resp:any)=>{
         this.tableData=resp.tableData;
+        this.totalPages=Math.ceil(((resp.count)/this.pageSize));
+        this.generatePageButtons();
       })
     }
 
@@ -83,10 +91,8 @@ export class ViewComponent implements OnInit,OnChanges {
        else{
         this.pageButtons=Array.from({length:5},(_,i)=>this.current_page+i);
        }
-       
-     }
-     
-  }
+      }
+    }
 
   pageEvent(current_page:number){
      this.current_page=current_page;
@@ -128,7 +134,6 @@ export class ViewComponent implements OnInit,OnChanges {
     if(checked){
       this.tick=true;
       this.viewService.tick=true;
-      
     }
     else{
       this.tick=false;
@@ -199,6 +204,7 @@ export class ViewComponent implements OnInit,OnChanges {
      const input=(event.target as HTMLInputElement);
      if(input.files){
       this.editFile=input.files[0];
+      this.editFile_name=this.editFile.name;
      }
   }
 

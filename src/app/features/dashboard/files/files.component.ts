@@ -16,6 +16,7 @@ export class FilesComponent implements OnInit {
   selectedFiles:any={};
   previewFileType:any;
   previewFilePath:SafeResourceUrl | undefined
+  file_name:string="";
   constructor(private fileService:FilesService,private zipService:ZipService,private sanitizer:DomSanitizer) { }
 
   
@@ -39,6 +40,7 @@ export class FilesComponent implements OnInit {
     const input=event.target as HTMLInputElement;
     if(input.files){
       this.file=input.files[0];
+      this.file_name=this.file.name;
     }
   }
 

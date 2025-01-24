@@ -15,6 +15,7 @@ export class ProfileComponent implements OnInit {
   id=localStorage.getItem("id");
   profile_pic:string="";
   file:any;
+  file_name:string="";
   constructor(private auth_logout:AuthLogoutService,private fileService:FilesService,private profileService:ProfileService) { }
   
   ngOnInit(): void {
@@ -39,6 +40,7 @@ export class ProfileComponent implements OnInit {
      const input=event.target as HTMLInputElement;
      if(input.files){
        this.file=input.files[0];
+       this.file_name=this.file.name;
      }
   }
 
@@ -54,7 +56,7 @@ export class ProfileComponent implements OnInit {
             console.log("saved in database");
             console.log(resp);
             this.getUserDetails();
-            
+            this.file_name='';
           });
         },
       })
