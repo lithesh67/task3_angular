@@ -21,19 +21,17 @@ export class CartComponent implements OnInit,OnChanges {
       this.getCart();
       let tempFilterCols=this.viewService.selectedCols;
       if(tempFilterCols.includes('vendor_name')){
-        tempFilterCols.filter((col:any)=>{return col!='vendor_name'});
+        tempFilterCols=tempFilterCols.filter((col:any)=>{return col!='vendor_name'});
         tempFilterCols.push('selectedVendor');
       }
-      tempFilterCols.filter((col:any)=>{return col!='measure'});
-      this.cart.filter((item:any)=>{
-        let check=false;
+      tempFilterCols=tempFilterCols.filter((col:any)=>{return col!='measure'});
+      this.cart=this.cart.filter((item:any)=>{
         for(let col of tempFilterCols){
           if(item[col].toString().toLowerCase().includes(this.text.toLowerCase())){
-            check=true;
-            break;
+            return true;
           }
         }
-        return check;
+        return false;
       });
     }
   }
@@ -102,7 +100,24 @@ export class CartComponent implements OnInit,OnChanges {
         alert("Some error has occured,try again");
       }
     })
+  }
 
+  removeFromCart(product_vendor:string,index:number,product_id:number){
+     const tempselectedQunatity=this.viewService.mainCart[product_vendor].selectedQuantity;
+     const stock=this.viewService.mainCart[product_vendor].quantity_in_stock;
+     this.cartService.removeFromCart(product_id,tempselectedQunatity,stock).subscribe((resp:any)=>{
+      console.log(resp);
+      this.viewService.mainCart[product_vendor].quantity_in_stock+=-this.viewService.mainCart[product_vendor].selectedQuantity;
+      this.viewService.mainCart[product_vendor].selectedQuantity=0;
+      for(let [key,value] of Object.entries(this.viewService.mainCart)){
+        if(this.viewService.mainCart[key].product_id==product_id){
+          this.viewService.mainCart[key].quantity_in_stock=this.viewService.mainCart[product_vendor].quantity_in_stock;
+        }
+      }
+      delete this.viewService.mainCart[product_vendor];
+      this.setCart();
+      this.getCart();
+    });
   }
 
   getAbsolute(num:number){

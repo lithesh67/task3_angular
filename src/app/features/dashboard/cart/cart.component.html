@@ -7,6 +7,7 @@
         <th scope="col">Category</th>
         <th scope="col">Vendors</th>
         <th scope="col">Quantity</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -32,7 +33,10 @@
               <button class="btn btn-outline-dark rounded-2 px-1 py-1 border" (click)="increase(i,product.product_id,product.product_vendor)" [disabled]="product.selectedQuantity==product.quantity_in_stock">+</button>
               {{ getAbsolute(product.selectedQuantity) }}
               <button class="btn  btn-outline-dark px-1 py-1 border" (click)="decrease(i,product.product_id,product.product_vendor)" [disabled]="product.selectedQuantity==0">-</button>
-            </td>    
+            </td> 
+            <td>
+              <img class="btn p-0 m-0" height="30" width="30" src="../../../../assets/images/delete.svg" (click)="removeFromCart(product.product_vendor,i,product.product_id)">
+            </td>   
           </tr>
     </tbody>
   </table>

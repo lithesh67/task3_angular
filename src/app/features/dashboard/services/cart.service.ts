@@ -21,4 +21,8 @@ export class CartService {
     return this.http.patch(`${this.apiUrl}/updateQuantity`,{tempCartArray});
   }
 
+  removeFromCart(product_id:number,selectedQuantity:number,stock:number){
+    return this.http.patch(`${this.apiUrl}/removeFromCart`,{product_id,selectedQuantity,stock});
+  }
+
 }
