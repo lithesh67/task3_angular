@@ -44,6 +44,7 @@ export class ViewComponent implements OnInit,OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if(this.viewService.selectedCols.length!=0 && this.toggle=="view"){
       if(changes['text'].currentValue==""){
+        this.current_page=1;
         this.getItems();
         return;
       }
@@ -96,6 +97,13 @@ export class ViewComponent implements OnInit,OnChanges {
 
   pageEvent(current_page:number){
      this.current_page=current_page;
+     if(this.text!=""){
+      this.viewService.onSearch(this.text,this.pageSize,this.current_page).subscribe((resp:any)=>{
+        this.tableData=resp.tableData;
+        this.totalPages=Math.ceil(((resp.count)/this.pageSize));
+        this.generatePageButtons();
+      });
+     }
      this.getItems();
   }
 
@@ -134,11 +142,20 @@ export class ViewComponent implements OnInit,OnChanges {
     if(checked){
       this.tick=true;
       this.viewService.tick=true;
+      this.mainService.fetchAll().subscribe((resp:any)=>{
+        let data=resp.result;
+        for(let value of data){
+          this.viewService.viewSelected[value.product_id]=value;
+          this.viewService.viewcheckboxes[value.product_id]=true;
+        }
+      })
     }
     else{
       this.tick=false;
       this.viewService.tick=false;
-      
+      this.viewService.viewSelected={};
+      this.viewService.viewcheckboxes={};
+      this.checkboxes={};
     }
   }
 
