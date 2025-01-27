@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FilesService } from '../services/files.service';
 import { ZipService } from 'src/app/core/services/zip.service';
 import { SafeResourceUrl ,DomSanitizer} from '@angular/platform-browser';
+import { Files } from 'src/app/core/models/files';
 
 @Component({
   selector: 'app-files',
@@ -11,7 +12,7 @@ import { SafeResourceUrl ,DomSanitizer} from '@angular/platform-browser';
 })
 export class FilesComponent implements OnInit {
   file:any;
-  fileData:any;
+  fileData:Array<Files>=[];
   tick:any=false;
   selectedFiles:any={};
   previewFileType:any;
@@ -55,7 +56,7 @@ export class FilesComponent implements OnInit {
   }
 
   onCheckChange(event:Event,index:number){
-    const checked=(event.target as HTMLInputElement);
+    const checked=(event.target as HTMLInputElement).checked;
     if(checked){
       this.selectedFiles[index]=true;
     }
@@ -83,7 +84,7 @@ export class FilesComponent implements OnInit {
   }
 
   downloadZipFiles(){
-    const files=[];
+    let files=[];
     if(this.tick){
       for(let file of this.fileData){
         files.push(file.file_path);
@@ -91,7 +92,8 @@ export class FilesComponent implements OnInit {
     }
     else{
       for(let index of Object.keys(this.selectedFiles)){
-        files.push(this.fileData[index].file_path);
+        let Index=Number(index);
+        files.push(this.fileData[Index].file_path);
       }
     }
     if(files.length!=0){
@@ -131,6 +133,8 @@ export class FilesComponent implements OnInit {
     return 'application';
   }
 
-
+ getNum(file_size:string){
+  return Number(file_size);
+ }
 
 }

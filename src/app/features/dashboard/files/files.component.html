@@ -23,15 +23,15 @@
           <td>
             <div class="d-flex m-0 p-0">
               <input type="checkbox" class="form-check-input mx-1 c_custom" id="btncheck" autocomplete="off" [checked]="tick" (change)="onCheckChange($event,i)">
-              <img src="" alt="" class="rounded-circle" height="10" width="10" *ngIf="file.file_image else firstLetter">
+              <img src="" alt="" class="rounded-circle" height="10" width="10" *ngIf="file.file_path else firstLetter">
               <ng-template #firstLetter>
                   <div class="rounded-circle me-2 m-1 p-0" style="width:20px;height: 20px; background-color: rgb(186, 152, 206);">
-                     <h6 class="px-1" style="color:white;">{{file.file_name?.charAt(0)| uppercase}}</h6>
+                     <h6 class="px-1" style="color:white;">{{file.file_name.charAt(0)| uppercase}}</h6>
                   </div>
              </ng-template>
              <div class="d-flex flex-column m-0 p-0" data-bs-toggle="modal" data-bs-target="#previewFile"  (click)="reqFilePreview(file)"> 
                <p class="text-sm small m-0">{{file.file_name}}</p>
-              <p class="text-muted small m-0">{{file.file_size/1024 | number:'1.0-0' }}Kb</p>
+              <p class="text-muted small m-0">{{getNum(file.file_size)/1024 | number:'1.0-0' }}Kb</p>
              </div>
             </div>
           </td>

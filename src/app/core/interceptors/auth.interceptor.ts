@@ -8,12 +8,12 @@ import {
   HttpEventType
 } from '@angular/common/http';
 import { Observable ,tap} from 'rxjs';
-import { JsonPipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor() {}
+  constructor(private router:Router) {}
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token=sessionStorage.getItem("token");
@@ -31,6 +31,10 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(newReq).pipe(tap({
       next:(event:HttpEvent<any>)=>{
          if(event.type===HttpEventType.Response){
+          if(event.status===401){
+            this.router.navigate(['']);
+            return;
+          }
           const newToken=event.headers.get("Authorization") || event.headers.get('authorization'); 
           console.log(newToken);
           
