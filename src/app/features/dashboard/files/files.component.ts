@@ -102,7 +102,7 @@ export class FilesComponent implements OnInit {
   }
 
   reqFilePreview(fileRecord:any){
-    if(fileRecord.file_type.includes('application')){
+    if(fileRecord.file_type.includes('application') && !fileRecord.file_type.includes('pdf')){
       this.previewFilePath=this.sanitizer.bypassSecurityTrustResourceUrl(`https://view.officeapps.live.com/op/embed.aspx?src=`+fileRecord.file_path);
     }
     else{

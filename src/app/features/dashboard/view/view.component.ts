@@ -42,7 +42,7 @@ export class ViewComponent implements OnInit,OnChanges {
     });
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(this.viewService.selectedCols.length!=0 && this.toggle=="view"){
+    if(this.viewService.selectedCols.length!=0 && this.toggle=="view" && changes['text']){
       if(changes['text'].currentValue==""){
         this.current_page=1;
         this.getItems();

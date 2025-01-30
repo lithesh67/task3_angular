@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {  HttpClient } from '@angular/common/http';
+import {  Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -9,7 +9,6 @@ export class CartService {
   apiUrl=environment.apiUrl;
   constructor(private http:HttpClient) 
   { }
-  
   updateQuantity(singleProduct:any,num:number){ 
     console.log(singleProduct);
      

@@ -20,19 +20,19 @@ export class LoginComponent implements OnInit {
   })
   
   onSubmit(){
-      this.loginService.onLogin(this.loginForm.value).subscribe((resp:any)=>{
-      if(resp.bool===true){
-        sessionStorage.setItem("token",resp.token);
-        sessionStorage.setItem("refresh",resp.refresh);
-        localStorage.setItem("username",resp.username);
-        localStorage.setItem("email",resp.email);
-        localStorage.setItem("id",resp.id);
-        
-        this.router.navigate(['dashboard']);
-      }
-      else{
-        alert(resp.message);
-      }
+      this.loginService.onLogin(this.loginForm.value).subscribe({
+        next:(resp)=>{
+          sessionStorage.setItem("token",resp.token);
+          sessionStorage.setItem("refresh",resp.refresh);
+          localStorage.setItem("username",resp.username);
+          localStorage.setItem("email",resp.email);
+          localStorage.setItem("id",resp.id);
+          
+          this.router.navigate(['dashboard']);
+        },
+        error:(err)=>{
+          alert(err.error.message);
+        }
     })
   }
 

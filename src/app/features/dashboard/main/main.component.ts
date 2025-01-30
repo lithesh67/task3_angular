@@ -204,6 +204,8 @@ export class MainComponent implements OnInit {
 
   async importFileAsData(){
     this.newTable=await importFile(this.fileImport);
+    console.log(this.newTable);
+    
   }
 
 }
