@@ -21,7 +21,7 @@ export class FilesService {
 
   storeTheUrlOfFile(url:string,file:File){
     url=url.split('?')[0];
-    const obj={url,fileName:file.name,fileType:file.type,fileSize:file.size};
+    const obj={url,fileName:file.name,fileType:file.type,fileSize:(file.size).toString()};
     return this.http.post(`${this.apiUrl}/UploadFile`,obj);
   }
 

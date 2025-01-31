@@ -55,6 +55,12 @@ export class MainService {
      return this.http.get(`${this.apiUrl}/fetchAll`);
   }
 
+  storeTheUrlOfFileImport(url:string,file:File){
+    url=url.split('?')[0];
+    const obj={url,fileName:file.name,fileType:file.type,fileSize:(file.size).toString(),purpose:'1'};
+    return this.http.post(`${this.apiUrl}/UploadFile`,obj);
+  }
+
 
 
 }

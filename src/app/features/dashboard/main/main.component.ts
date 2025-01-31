@@ -24,6 +24,8 @@ export class MainComponent implements OnInit {
   newTable:any=[];
   checkedBoxes:any={};
   addFile_name:string='';
+  import_name:string='';
+  valid_import_file:boolean=false;
   constructor(private viewService:ViewService,private mainService:MainService,private fileService:FilesService) { }
  
   getCategories_vendors(){
@@ -199,13 +201,43 @@ export class MainComponent implements OnInit {
     const input=event.target as HTMLInputElement;
     if(input.files){
        this.fileImport=input.files[0];
+       this.import_name=input.files[0].name;
+       const type=this.fileImport.type;
+       if(type.includes('vnd.ms-excel') || type.includes('vnd.openxmlformats-officedocument.spreadsheetml.sheet')){
+         this.valid_import_file=true; 
+       }
     }
   }
 
-  async importFileAsData(){
-    this.newTable=await importFile(this.fileImport);
-    console.log(this.newTable);
+  // async importFileAsData(){
+  //   this.newTable=await importFile(this.fileImport);
+  //   console.log(this.newTable);
     
+  // }
+
+  uploadExcelFile(){
+    const fileName=this.fileImport.name.replace(/\s+/g,'');
+    const fileType=this.fileImport.type;
+    this.fileService.getPresignedUrl(fileName,fileType).subscribe((resp:any)=>{
+      const url=resp.url;
+      console.log(url);
+      this.fileService.uploadToServer(url,this.fileImport).subscribe((resp:any)=>{
+        console.log("Uploaded successfully");
+        this.mainService.storeTheUrlOfFileImport(url,this.fileImport).subscribe({
+          next:(resp:any)=>{
+            console.log("saved in database");
+            alert("Uploaded the file,you may close now");
+            console.log(resp);
+            this.import_name='';
+            this.valid_import_file=false;
+          },
+          error:(err)=>{
+            console.log(err);
+            alert("Upload failed,try again");
+          }
+        });
+      })
+    })
   }
 
 }
