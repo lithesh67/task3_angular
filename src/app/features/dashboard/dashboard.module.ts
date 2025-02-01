@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CartComponent } from './cart/cart.component';
 import { ViewService } from './services/view.service';
+import { ImportedFilesComponent } from './imported-files/imported-files.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { ViewService } from './services/view.service';
     ProfileComponent,
     MainComponent,
     ViewComponent,
-    CartComponent
+    CartComponent,
+    ImportedFilesComponent
   ],
   imports: [
     CommonModule,

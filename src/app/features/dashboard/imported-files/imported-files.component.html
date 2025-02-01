@@ -1,0 +1,53 @@
+<div class="d-flex flex-column">
+    <div>
+        <table class="table table-light table-hover">
+            <thead>
+              <tr>
+                <th scope="col">File name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Error file</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let file of importedFiles" class="text-sm small m-0 p-0">
+                  <td>
+                    {{file.file_name}}
+                  </td>
+                  <td>
+                    <p class="border rounded-3 px-2 m-0 status">&#8226; {{file.status}}</p>
+                  </td>
+                  <td>
+                    <button  class="btn btn-outline-dark m-0 px-2 py-0" *ngIf="file.error_file else noError" 
+                            (click)="onPreview(file.error_file)"  data-bs-toggle="modal" data-bs-target="#previewErrors">
+                            Preview
+                    </button>
+                    <ng-template #noError><p>No errors</p></ng-template>
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+    </div>
+
+</div>
+
+<!-- Preview modal  -->
+
+<div class="modal fade" id="previewErrors" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Preview File</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div *ngIf="previewUrl">
+                <iframe [src]="previewUrl"  height="400px" width="100%"></iframe>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+         <a [href]="downloadUrl" download> <button class="btn btn-primary">Download</button></a>
+        </div>
+      </div>
+    </div>
+  </div>

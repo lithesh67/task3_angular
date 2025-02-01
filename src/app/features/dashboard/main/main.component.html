@@ -21,6 +21,7 @@
     <div>
       <button class="btn btn-outline-dark btn-sm" (click)="toggle='view'">View all</button>
       <button class="btn btn-outline-dark btn-sm" (click)="toggle='cart'">Cart</button>
+      <button class="btn btn-outline-dark btn-sm" (click)="toggle='importedFiles'">Imported Files</button>
     </div>
 
     <div class="px-3">
@@ -43,6 +44,7 @@
   <div>
      <app-view [text]="text" [newTable]="newTable" [toggle]="toggle" *ngIf="toggle==='view'"></app-view>
      <app-cart [text]="text" [toggle]="toggle"  *ngIf="toggle==='cart'"></app-cart>
+     <app-imported-files *ngIf="toggle==='importedFiles'"></app-imported-files>
   </div>
 
  
