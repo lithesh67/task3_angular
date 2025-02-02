@@ -1,3 +1,15 @@
 .status{
     display:inline-block;
 }
+
+.pending{
+    background-color: rgb(172, 171, 171);
+}
+
+.processing{
+    background-color: rgb(172, 145, 197);
+}
+
+.processed{
+    background-color: rgb(178, 216, 178);
+}

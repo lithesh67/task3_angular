@@ -19,9 +19,9 @@
 
   <div class="d-flex justify-content-between mt-3 px-2">
     <div>
-      <button class="btn btn-outline-dark btn-sm" (click)="toggle='view'">View all</button>
-      <button class="btn btn-outline-dark btn-sm" (click)="toggle='cart'">Cart</button>
-      <button class="btn btn-outline-dark btn-sm" (click)="toggle='importedFiles'">Imported Files</button>
+      <button [class.viewing]="toggle=='view'"  class="btn btn-outline-dark btn-sm" (click)="toggle='view'">View all</button>
+      <button [class.viewing]="toggle=='cart'"  class="btn btn-outline-dark btn-sm" (click)="toggle='cart'">Cart</button>
+      <button [class.viewing]="toggle=='importedFiles'" class="btn btn-outline-dark btn-sm" (click)="toggle='importedFiles'">Imported Files</button>
     </div>
 
     <div class="px-3">

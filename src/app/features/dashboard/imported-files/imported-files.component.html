@@ -14,7 +14,8 @@
                     {{file.file_name}}
                   </td>
                   <td>
-                    <p class="border rounded-3 px-2 m-0 status">&#8226; {{file.status}}</p>
+                    <p [ngClass]="{'pending':file.status=='pending','processing':file.status=='processing','processed':file.status=='processed'}" 
+                     class="border rounded-3 px-2 m-0 status">&#8226; {{file.status}}</p>
                   </td>
                   <td>
                     <button  class="btn btn-outline-dark m-0 px-2 py-0" *ngIf="file.error_file else noError" 

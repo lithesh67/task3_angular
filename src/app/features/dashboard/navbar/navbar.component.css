@@ -1,0 +1,15 @@
+.notifications{
+    max-height: 40vh;
+}
+
+.each{
+    border:solid rgb(178, 136, 218) 1px;
+}
+
+.notehead{
+    color:rgb(65, 64, 64);
+}
+
+.markread{
+    cursor: pointer;
+}
