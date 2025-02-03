@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { notifyModel } from 'src/app/core/models/notification';
+import { SocketService } from 'src/app/core/services/socket.service';
+
 
 @Component({
   selector: 'app-navbar',
@@ -9,10 +11,17 @@ import { notifyModel } from 'src/app/core/models/notification';
 })
 export class NavbarComponent implements OnInit {
   notifications:Array<notifyModel>=[];
-  constructor(private navbarSevice:NavbarService) { }
+  unmarked_count:number=0;
+  constructor(private navbarSevice:NavbarService,private socketService: SocketService) { }
 
   ngOnInit(): void {
+    this.socketService.onNotifying().subscribe((notification)=>{
+      this.notifications.push(notification);
+      console.log(notification);
+      
+    });
     this.getNotifications();
+
   }
 
   getNotifications(){
@@ -20,8 +29,37 @@ export class NavbarComponent implements OnInit {
       next:(resp)=>{
         this.notifications=resp.result;
         console.log(resp.result);
+        this.updateCount();
         }
-     })
+     });
+  }
+
+  updateCount(){
+    let count=0;
+    for(let note of this.notifications){
+      if(note.is_read=='0'){
+        count+=1
+      }
+    }
+    this.unmarked_count=count;
+  }
+
+  markRead(notification_id:number){
+    this.navbarSevice.markRead(notification_id).subscribe({
+      next:(resp)=>{
+        console.log(resp.result);
+        this.notifications=this.notifications.map((note)=>{
+          if(note.notification_id==notification_id){
+            note.is_read='1';
+          }
+          return note;
+        });
+        this.updateCount();
+      },
+      error:(err)=>{
+        console.log(err);
+      }
+    })
   }
 
 }

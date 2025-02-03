@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ImportedFilesService } from '../services/imported-files.service';
 import {  importFilesModel } from 'src/app/core/models/importFiles';
 import { SafeResourceUrl,DomSanitizer } from '@angular/platform-browser';
+import { SocketService } from 'src/app/core/services/socket.service';
 
 @Component({
   selector: 'app-imported-files',
@@ -12,9 +13,21 @@ export class ImportedFilesComponent implements OnInit {
   importedFiles:Array<importFilesModel>=[];
   previewUrl:SafeResourceUrl | undefined;
   downloadUrl:string="";
-  constructor(private importService:ImportedFilesService,private sanitizer:DomSanitizer) { }
+  constructor(private importService:ImportedFilesService,private sanitizer:DomSanitizer,
+              private socketService:SocketService) { }
 
   ngOnInit(): void {
+    this.socketService.receiveStatus().subscribe((statusUpdate)=>{
+      this.importedFiles=this.importedFiles.map((file:importFilesModel)=>{
+        if(file.file_id===statusUpdate.file_id){
+           file.status=statusUpdate.status;
+        }
+        return file;
+      });
+      if(statusUpdate.status=='processed'){
+         this.getImportedFiles();
+      }
+    })
     this.getImportedFiles();
   }
 

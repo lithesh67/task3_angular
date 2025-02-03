@@ -128,7 +128,7 @@ export class ViewComponent implements OnInit,OnChanges {
   onConfirmingDelete(){
      this.viewService.onConfirmingDelete(this.deleteId).subscribe((resp:any)=>{
         if(resp.bool===true){
-           this.getItems();
+          this.getItems();
         }
      });
   }

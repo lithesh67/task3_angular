@@ -6,7 +6,8 @@
     <div>
         <div class="dropdown pl-5">
             <div class="d-flex align-items-center p-0 m-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" role="button">
-                <img src="../../../../assets/images/notifications.svg" alt="img" style="background-color:blueviolet;" class="rounded-3 p-0 m-0" height="32" width="32">
+                <img src="../../../../assets/images/notifications.svg" alt="img" style="background-color:blueviolet;" class="rounded-circle p-0 m-0" height="30" width="30">
+                <span *ngIf="unmarked_count" class="badge">{{unmarked_count}}</span>
             </div>
             <ul class="dropdown-menu px-2 rounded-1" style="width:350px">
                 <li type="dropdown-item m-1 text-sm" style="color:rgb(154, 96, 209)">Notifications</li>
@@ -14,7 +15,7 @@
                     <li *ngFor="let note of notifications" class="rounded-3 each my-1 px-1" type="dropdown-item">
                        <p class="text-sm m-0 p=0 small notehead">{{note.notification_title}}</p>
                        <p class="text-sm text-muted small m-0 p-0"> {{note.message}}</p>
-                       <a *ngIf="note.is_read=='0'" class="text-sm small markread" >mark as read</a>
+                       <a *ngIf="note.is_read=='0'" class="text-sm small markread" (click)="markRead(note.notification_id)">mark as read</a>
                     </li>
                 </div>
             </ul>
