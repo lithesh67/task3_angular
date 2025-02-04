@@ -3,7 +3,7 @@
         <img  *ngIf="profile_pic else firstLetter" [src]="profile_pic" alt="img" class="rounded-circle me-3" height="30" width="30">
         <ng-template #firstLetter>
             <div class="rounded-circle" style="width:40px;height: 40px; background-color: black;">
-               <h3 style="color:white;">{{username?.charAt(0)| uppercase}}</h3>
+               <h3 style="color:white;">{{username?.charAt(0) | uppercase}}</h3>
             </div>
        </ng-template>
         <div class="d-flex flex-column align-items-start pl-5">

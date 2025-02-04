@@ -3,6 +3,7 @@ import { ViewService } from '../services/view.service';
 import { generatePDF } from 'src/app/core/utils/pdf';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MainService } from '../services/main.service';
+import { CryptoService } from 'src/app/core/services/crypto.service';
 
 @Component({
   selector: 'app-view',
@@ -27,6 +28,7 @@ export class ViewComponent implements OnInit,OnChanges {
   selectedArray:any=[];
   pageButtons:any=[];
   editFile_name:string="";
+  role:string="";
   @Input() text="";
   @Input() newTable=[];
   @Input() toggle="";
@@ -62,10 +64,13 @@ export class ViewComponent implements OnInit,OnChanges {
       })
     }
   }
-  constructor(private viewService:ViewService,private mainService:MainService) { }
+  constructor(private viewService:ViewService,private mainService:MainService,
+              private cryptoService:CryptoService
+  ) { }
 
   ngOnInit(): void {
      this.getItems();
+     this.role=this.cryptoService.getRole();
   }
 
   getItems(){

@@ -5,6 +5,7 @@
               <tr>
                 <th scope="col">File name</th>
                 <th scope="col">Status</th>
+                <th scope="col">Uploaded on </th>
                 <th scope="col">Error file</th>
               </tr>
             </thead>
@@ -16,6 +17,9 @@
                   <td>
                     <p [ngClass]="{'pending':file.status=='pending','processing':file.status=='processing','processed':file.status=='processed'}" 
                      class="border rounded-3 px-2 m-0 status">&#8226; {{file.status}}</p>
+                  </td>
+                  <td>
+                    <p>{{file.created_at | date: 'yyyy-MM-dd HH:mm'}}</p>
                   </td>
                   <td>
                     <button  class="btn btn-outline-dark m-0 px-2 py-0" *ngIf="file.error_file else noError" 

@@ -37,7 +37,8 @@
               "rgbcolor",
               "core-js",
               "file-saver",
-              "jszip"
+              "jszip",
+              "crypto-js"
             ] 
           },
           "configurations": {

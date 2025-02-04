@@ -45,9 +45,9 @@
                 </td>
                 <td class="p-2">
                   <div class="d-flex justify-content-between">
-                    <img class="btn p-0 m-0" height="30" width="30" src="../../../../assets/images/download.svg" (click)="downloadPDF(i)">
-                    <img class="btn p-0 m-0" height="30" width="30" (click)="onDeleteRequest(product.product_id)" src="../../../../assets/images/delete.svg" data-bs-toggle="modal" data-bs-target="#deleteButton">
-                    <img class="btn p-0 mt-2" height="17" width="17" src="../../../../assets/images/edit.svg" (click)="onClickingEdit(product)" data-bs-toggle="modal" data-bs-target="#editProduct">
+                    <img *ngIf="role=='admin' || role=='manager'" class="btn p-0 m-0" height="30" width="30" src="../../../../assets/images/download.svg" (click)="downloadPDF(i)">
+                    <img *ngIf="role=='admin'"  class="btn p-0 m-0" height="30" width="30" (click)="onDeleteRequest(product.product_id)" src="../../../../assets/images/delete.svg" data-bs-toggle="modal" data-bs-target="#deleteButton">
+                    <img *ngIf="role=='admin' || role== 'manager'" class="btn p-0 mt-2" height="17" width="17" src="../../../../assets/images/edit.svg" (click)="onClickingEdit(product)" data-bs-toggle="modal" data-bs-target="#editProduct">
                   </div>
                 </td>
         

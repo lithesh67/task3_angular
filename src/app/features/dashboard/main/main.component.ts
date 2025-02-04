@@ -5,6 +5,7 @@ import { MainService } from '../services/main.service';
 import { FilesService } from '../services/files.service';
 import { downloadExcel } from 'src/app/core/utils/excel';
 import { importFile } from 'src/app/core/utils/import';
+import { CryptoService } from 'src/app/core/services/crypto.service';
 
 @Component({
   selector: 'app-main',
@@ -26,7 +27,10 @@ export class MainComponent implements OnInit {
   addFile_name:string='';
   import_name:string='';
   valid_import_file:boolean=false;
-  constructor(private viewService:ViewService,private mainService:MainService,private fileService:FilesService) { }
+  role:string="";
+  constructor(private viewService:ViewService,private mainService:MainService,private fileService:FilesService,
+              private cryptoService:CryptoService
+  ) { }
  
   getCategories_vendors(){
     this.mainService.getCategories_vendors().subscribe((resp:any)=>{
@@ -40,6 +44,7 @@ export class MainComponent implements OnInit {
    
   ngOnInit(): void {
     this.getCategories_vendors();
+    this.role=this.cryptoService.getRole();
   }
 
   productForm=new FormGroup({

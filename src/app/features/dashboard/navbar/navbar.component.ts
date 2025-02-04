@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {  Component, OnInit } from '@angular/core';
 import { NavbarService } from '../services/navbar.service';
 import { notifyModel } from 'src/app/core/models/notification';
 import { SocketService } from 'src/app/core/services/socket.service';
@@ -12,13 +12,19 @@ import { SocketService } from 'src/app/core/services/socket.service';
 export class NavbarComponent implements OnInit {
   notifications:Array<notifyModel>=[];
   unmarked_count:number=0;
-  constructor(private navbarSevice:NavbarService,private socketService: SocketService) { }
+  constructor(private navbarSevice:NavbarService,private socketService: SocketService,) { }
 
   ngOnInit(): void {
     this.socketService.onNotifying().subscribe((notification)=>{
-      this.notifications.push(notification);
-      console.log(notification);
+      let temp=[notification]
+      for(let note of this.notifications){
+        temp.push(note);
+      }
+      this.notifications=temp;
+      console.log(this.notifications);
       
+      this.updateCount();
+  
     });
     this.getNotifications();
 
@@ -45,6 +51,8 @@ export class NavbarComponent implements OnInit {
   }
 
   markRead(notification_id:number){
+    console.log(notification_id);
+    
     this.navbarSevice.markRead(notification_id).subscribe({
       next:(resp)=>{
         console.log(resp.result);

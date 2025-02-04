@@ -4,12 +4,12 @@
     
     <div *ngIf="toggle==='view'">
       <button class="btn btn-outline-dark mx-1"  data-bs-toggle="modal" data-bs-target="#cart" (click)="onClickingMove()">Move to cart</button>
-      <button class="btn btn-outline-dark mx-1" (click)="downloadAll()">Download all</button>
-      <button class="btn btn-outline-dark mx-1"  data-bs-toggle="modal" data-bs-target="#import">
+      <button *ngIf="role=='admin' || role=='manager'" class="btn btn-outline-dark mx-1" (click)="downloadAll()">Download all</button>
+      <button *ngIf="role=='admin'" class="btn btn-outline-dark mx-1"  data-bs-toggle="modal" data-bs-target="#import">
         <img class="px-1" src="../../../../assets/images/upload_cloud_white.svg" alt=""/>
         Import
       </button>
-      <button class="btn mx-1" style="background-color: rgb(143, 66, 216); color: white"
+      <button *ngIf="role=='admin'" class="btn mx-1" style="background-color: rgb(143, 66, 216); color: white"
               data-bs-toggle="modal" data-bs-target="#addProduct"> 
         + Add product
       </button>
@@ -21,7 +21,7 @@
     <div>
       <button [class.viewing]="toggle=='view'"  class="btn btn-outline-dark btn-sm" (click)="toggle='view'">View all</button>
       <button [class.viewing]="toggle=='cart'"  class="btn btn-outline-dark btn-sm" (click)="toggle='cart'">Cart</button>
-      <button [class.viewing]="toggle=='importedFiles'" class="btn btn-outline-dark btn-sm" (click)="toggle='importedFiles'">Imported Files</button>
+      <button *ngIf="role=='admin'" [class.viewing]="toggle=='importedFiles'" class="btn btn-outline-dark btn-sm" (click)="toggle='importedFiles'">Imported Files</button>
     </div>
 
     <div class="px-3">

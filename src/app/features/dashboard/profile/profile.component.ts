@@ -29,6 +29,8 @@ export class ProfileComponent implements OnInit {
   getUserDetails(){
     this.profileService.getUserDetails().subscribe((resp:any)=>{
        this.profile_pic=resp.profile_pic;
+       console.log(this.profile_pic);
+       
     });
   }
 
