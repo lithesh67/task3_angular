@@ -22,6 +22,7 @@
       <button [class.viewing]="toggle=='view'"  class="btn btn-outline-dark btn-sm" (click)="toggle='view'">View all</button>
       <button [class.viewing]="toggle=='cart'"  class="btn btn-outline-dark btn-sm" (click)="toggle='cart'">Cart</button>
       <button *ngIf="role=='admin'" [class.viewing]="toggle=='importedFiles'" class="btn btn-outline-dark btn-sm" (click)="toggle='importedFiles'">Imported Files</button>
+      <button [class.viewing]="toggle=='chat'" class="btn btn-outline-dark btn-sm" (click)="toggle='chat'">Chat</button>
     </div>
 
     <div class="px-3">
@@ -45,6 +46,7 @@
      <app-view [text]="text" [newTable]="newTable" [toggle]="toggle" *ngIf="toggle==='view'"></app-view>
      <app-cart [text]="text" [toggle]="toggle"  *ngIf="toggle==='cart'"></app-cart>
      <app-imported-files *ngIf="toggle==='importedFiles'"></app-imported-files>
+     <app-chat *ngIf="toggle==='chat'"></app-chat>
   </div>
 
  

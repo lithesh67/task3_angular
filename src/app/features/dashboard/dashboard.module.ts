@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CartComponent } from './cart/cart.component';
 import { ViewService } from './services/view.service';
 import { ImportedFilesComponent } from './imported-files/imported-files.component';
+import { ChatComponent } from './chat/chat.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { ImportedFilesComponent } from './imported-files/imported-files.componen
     MainComponent,
     ViewComponent,
     CartComponent,
-    ImportedFilesComponent
+    ImportedFilesComponent,
+    ChatComponent
   ],
   imports: [
     CommonModule,
