@@ -1,8 +1,19 @@
 .blueviolet{
     background-color:blueviolet;
+    color: white;
 }
 
 .chatbox{
     border-left:3px solid blueviolet;
     flex-grow: 1;
+}
+
+.lefty{
+    display:flex;
+    justify-content: flex-start;
+}
+
+.right{
+    display: flex;
+    justify-content: flex-end;
 }

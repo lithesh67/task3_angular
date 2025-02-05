@@ -30,5 +30,20 @@ export class SocketService {
       })
     })
   }
+
+  sendMessge(message:string,userid:number){
+    this.socket.emit('send_message',{message,userid:2});
+  }
+
+  receiveMessage():Observable<any>{
+    return new Observable((observer)=>{
+      this.socket.on('receive_message',(receivedMessage)=>{
+        observer.next(receivedMessage);
+      })
+    })
+  }
+
+  
+
 }
 

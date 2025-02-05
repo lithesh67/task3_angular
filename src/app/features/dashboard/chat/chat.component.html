@@ -1,18 +1,69 @@
-<div class="d-flex w-100">
-    <div class="m-2 p-2" style="width:250px ;height:440px">
-        <!-- <button class="btn btn-sm rounded-3 blueviolet">New chat</button> -->
-         users goes here
+<div class="d-flex w-100" style="height:440px">
+    <div class="d-flex flex-column m-2 p-2" style="width:250px ">
+        <div class="d-flex justify-content-between">
+        <button class="btn btn-sm rounded-3 blueviolet mx-2">Create group</button>
+        <button class="btn btn-sm rounded-3 blueviolet mx-2">Join group</button>
+        </div>
+        <button class="btn btn-sm rounded-3 blueviolet ms-2 my-2" data-bs-toggle="modal" data-bs-target="#viewUsers">New chat</button>
+        <div class="d-flex flex-column ms-2 p-2">
+            <div *ngFor="let chat of existingChats">
+                {{chat.username}}
+            </div>
+        </div>
     </div>
     <div class="d-flex flex-column m-2 p-2 chatbox">
         <div class="p-2 border" style="height: 35px;">
             receiver name and other stuff goes here
         </div>
         <div class="flex-grow-1 overflow-auto p-2">
-            chat messages goes here
+            <div class="d-flex flex-column">
+                <p  [ngClass]="message.sender_id==currentChatId? 'lefty' : 'righty'" *ngFor="let message of currentChat">
+                    {{message.message}}
+                </p>
+            </div>
         </div>
-        <div class="d-flex justify-content-between" style="height:38px;">
-           <input type="text" placeholder="type here" class="flex-grow-1 rounded-2">
-           <button class="btn btn-outline-dark">send</button>
+        <div style="height:38px;">
+           <form class="d-flex justify-content-between" [formGroup]="messageForm">
+               <input type="text" placeholder="type here" class="flex-grow-1 rounded-2" formControlName="message">
+               <button class="btn btn-sm blueviolet" [disabled]="messageForm.invalid" (click)="onClickingSend()">send</button>
+          </form> 
         </div>
     </div>
 </div>
+
+
+<!-- Modals -->
+
+<!-- New chat modal  -->
+
+<div class="modal fade" id="viewUsers" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">New chat</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body overflow-x-hidden"  style="max-height:60vh;">
+            <table class="table table-light table-hover  table-responsive">
+                <thead>
+                  <tr>
+                    <th scope="col">Username</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                   <tr *ngFor="let user of allUsers">
+                     <td>{{user.username}}</td>
+                     <td>
+                        <button class="btn btn-sm blueviolet" (click)="createChat(user.id)">Chat</button>
+                    </td>
+                   </tr>
+                </tbody>
+              </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
