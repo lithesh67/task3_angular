@@ -31,8 +31,8 @@ export class SocketService {
     })
   }
 
-  sendMessge(message:string,userid:number){
-    this.socket.emit('send_message',{message,userid:2});
+  sendMessge(message:string,userid:number,chat_id:number){
+    this.socket.emit('send_message',{message,userid,chat_id});
   }
 
   receiveMessage():Observable<any>{

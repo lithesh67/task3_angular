@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { allUsersModel } from 'src/app/core/models/chat';
 import { ChatService } from '../services/chat.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -11,17 +11,22 @@ import { SocketService } from 'src/app/core/services/socket.service';
 })
 export class ChatComponent implements OnInit {
   allUsers:Array<allUsersModel>=[];
-  existingChats:any=[{username:'akshay2',id:'2'}];
+  existingChats:any=[];
   currentChat:Array<any>=[]
   currentChatId:number| null=null;
-  constructor(private chatService:ChatService,private socketService:SocketService) { }
+  currentReceiver:number| null=null;
+  constructor(private chatService:ChatService,private socketService:SocketService,
+              private cdr:ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     this.fetchAllUsers();
     this.fetchExistingChats();
     this.socketService.receiveMessage().subscribe((receivedMessage)=>{
       console.log(receivedMessage);
-      if(receivedMessage.userid==this.currentChatId){
+      if(receivedMessage.sender_id==this.currentReceiver){
+        console.log(receivedMessage.sender_id,this.currentReceiver);
+        
         this.currentChat.push(receivedMessage);
       }
     })
@@ -44,24 +49,33 @@ export class ChatComponent implements OnInit {
 
   fetchExistingChats(){
     this.chatService.fetchExistingChats().subscribe((resp)=>{
-      console.log(resp);
-      
+      this.existingChats=resp.result;
     })
   }
 
   onClickingSend(){
-    this.socketService.sendMessge(this.messageForm.controls.message.value?.trim()!,2);
+    if(this.currentChatId){
+      const tempMessage=this.messageForm.controls.message.value?.trim()!;
+      this.socketService.sendMessge(tempMessage,this.currentReceiver!,this.currentChatId);
+   }
   }
 
-  openChatOfUser(){
-
+  openChatOfUser(chat_id:number,user_id:number){
+     this.chatService.getUserChat(chat_id).subscribe({
+      next:(resp)=>{
+        console.log(resp.result);
+        this.currentReceiver=user_id;
+        this.currentChatId=chat_id;
+        this.currentChat=resp.result;
+      }
+     })
   }
 
 
-  createChat(userid:number){
+  createChat(userid:number,username:string){
     this.chatService.createChat(userid).subscribe({
       next:(resp)=>{
-        console.log(resp);
+        this.existingChats.push({'chat_id':resp.chat_id,'user_id':userid,'username':username})
       },
       error:(err)=>{
         console.log(err);

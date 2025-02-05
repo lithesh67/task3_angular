@@ -7,7 +7,9 @@
         <button class="btn btn-sm rounded-3 blueviolet ms-2 my-2" data-bs-toggle="modal" data-bs-target="#viewUsers">New chat</button>
         <div class="d-flex flex-column ms-2 p-2">
             <div *ngFor="let chat of existingChats">
-                {{chat.username}}
+                <div (click)="openChatOfUser(chat.chat_id,chat.user_id)">
+                  {{chat.username}}
+                </div>
             </div>
         </div>
     </div>
@@ -17,7 +19,7 @@
         </div>
         <div class="flex-grow-1 overflow-auto p-2">
             <div class="d-flex flex-column">
-                <p  [ngClass]="message.sender_id==currentChatId? 'lefty' : 'righty'" *ngFor="let message of currentChat">
+                <p  [ngClass]="message.sender_id==currentReceiver? 'righty' : 'lefty'" *ngFor="let message of currentChat">
                     {{message.message}}
                 </p>
             </div>
@@ -55,7 +57,7 @@
                    <tr *ngFor="let user of allUsers">
                      <td>{{user.username}}</td>
                      <td>
-                        <button class="btn btn-sm blueviolet" (click)="createChat(user.id)">Chat</button>
+                        <button class="btn btn-sm blueviolet" (click)="createChat(user.id,user.username)">Chat</button>
                     </td>
                    </tr>
                 </tbody>

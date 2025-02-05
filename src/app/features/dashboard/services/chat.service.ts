@@ -22,4 +22,8 @@ export class ChatService {
   fetchExistingChats():Observable<any>{
     return this.http.get(`${this.apiUrl}/existingChats`);
   }
+
+  getUserChat(chat_id:number):Observable<any>{
+    return this.http.get(`${this.apiUrl}/userChat?chat_id=${chat_id}`);
+  }
 }
