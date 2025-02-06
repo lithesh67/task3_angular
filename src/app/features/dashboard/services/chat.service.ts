@@ -15,8 +15,8 @@ export class ChatService {
     return this.http.get<{result:Array<allUsersModel>}>(`${this.apiUrl}/allUsers`);
   }
 
-  createChat(user_id:number):Observable<any>{
-    return this.http.post(`${this.apiUrl}/createChat`,{receiver_id:user_id});
+  createChat(user_id:number,username:string):Observable<any>{
+    return this.http.post(`${this.apiUrl}/createChat`,{receiver_id:user_id,receiver_name:username});
   }
 
   fetchExistingChats():Observable<any>{
@@ -25,5 +25,9 @@ export class ChatService {
 
   getUserChat(chat_id:number):Observable<any>{
     return this.http.get(`${this.apiUrl}/userChat?chat_id=${chat_id}`);
+  }
+
+  createGroup(group_name:string):Observable<any>{
+    return this.http.post(`${this.apiUrl}/newGroup`,{group_name});
   }
 }

@@ -23,6 +23,16 @@ export class SocketService {
     })
   }
 
+  // receiveOnJoin():Observable<any>{
+  //   return new Observable((observer)=>{
+  //     this.socket.on('added_to_a_group',(message)=>{
+  //       console.log(message);
+        
+  //       observer.next(message);
+  //     })
+  //   })
+  // }
+
   receiveStatus():Observable<{file_id:number,status:string}>{
     return new Observable((observer)=>{
       this.socket.on('status',(statusUpdate)=>{
@@ -41,6 +51,15 @@ export class SocketService {
         observer.next(receivedMessage);
       })
     })
+  }
+
+  joinGroup(chat_id:number,group_name:string,participants:Array<number>){
+    this.socket.emit('join_group',{chat_id,group_name,participants});
+  }
+
+    
+  sendToGroup( group_name:string,message:string,currentChatId:number){
+    
   }
 
   

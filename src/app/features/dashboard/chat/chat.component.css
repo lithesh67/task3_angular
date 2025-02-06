@@ -8,12 +8,25 @@
     flex-grow: 1;
 }
 
+
+
 .lefty{
-    display:flex;
+    display: flex;
     justify-content: flex-start;
 }
 
 .righty{
     display: flex;
     justify-content: flex-end;
+}
+
+.samachar{
+    display: inline-block;
+    max-width: 60%;
+    word-wrap: break-word;
+    background-color:blueviolet;
+    color: white;
+    /* border: solid black 1px; */
+    border-radius: 5px;
+    font-size:15px;
 }
