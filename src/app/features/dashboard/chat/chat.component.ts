@@ -15,6 +15,7 @@ export class ChatComponent implements OnInit {
   currentChat:Array<any>=[]
   currentChatId:number| null=null;
   is_group:Boolean=false;
+  logged_in_id:number=parseInt(localStorage.getItem('id')!);
   currentReceiver:number| null=null;
   receiverName:string="";
   constructor(private chatService:ChatService,private socketService:SocketService) { }

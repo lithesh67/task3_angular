@@ -59,7 +59,7 @@ export class SocketService {
 
     
   sendToGroup( group_name:string,message:string,currentChatId:number){
-    
+    this.socket.emit('send_to_group',{group_name,message,chat_id:currentChatId});
   }
 
   
