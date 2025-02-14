@@ -30,4 +30,12 @@ export class ChatService {
   createGroup(group_name:string):Observable<any>{
     return this.http.post(`${this.apiUrl}/newGroup`,{group_name});
   }
+
+  fetchUnjoinedGroups():Observable<any>{
+    return this.http.get(`${this.apiUrl}/unjoinedGroups`);
+  }
+
+  joinGroupPersonally(group_name:string,chat_id:number){
+    return this.http.post(`${this.apiUrl}/joinGroup`,{group_name,chat_id});
+  }
 }

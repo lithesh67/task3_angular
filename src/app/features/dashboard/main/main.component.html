@@ -9,7 +9,7 @@
         <img class="px-1" src="../../../../assets/images/upload_cloud_white.svg" alt=""/>
         Import
       </button>
-      <button *ngIf="role=='admin'" class="btn mx-1" style="background-color: rgb(143, 66, 216); color: white"
+      <button *ngIf="role=='admin' || role=='manager'" class="btn mx-1" style="background-color: rgb(143, 66, 216); color: white"
               data-bs-toggle="modal" data-bs-target="#addProduct"> 
         + Add product
       </button>

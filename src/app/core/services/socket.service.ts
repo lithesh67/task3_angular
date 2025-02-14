@@ -11,6 +11,7 @@ export class SocketService {
   constructor() {
     const token=sessionStorage.getItem('token');
     this.socket=io('http://localhost:5000',{
+    reconnectionDelayMax: 5000,
     auth:{token}
      });
    }

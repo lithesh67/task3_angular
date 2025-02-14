@@ -18,14 +18,16 @@ export class ChatComponent implements OnInit {
   logged_in_id:number=parseInt(localStorage.getItem('id')!);
   currentReceiver:number| null=null;
   receiverName:string="";
+  unjoinedGroups:any=[];
   constructor(private chatService:ChatService,private socketService:SocketService) { }
 
   ngOnInit(): void {
     this.fetchAllUsers();
     this.fetchExistingChats();
+    this.fetchUnjoinedGroups();
     this.socketService.receiveMessage().subscribe((receivedMessage)=>{
       console.log(receivedMessage);
-      if(receivedMessage.sender_id==this.currentReceiver){
+      if(receivedMessage.chat_id==this.currentChatId){
         console.log(receivedMessage.sender_id,this.currentReceiver);
         this.currentChat.push(receivedMessage);
       }
@@ -51,22 +53,31 @@ export class ChatComponent implements OnInit {
     });
   }
 
+  fetchUnjoinedGroups(){
+    this.chatService.fetchUnjoinedGroups().subscribe((resp:any)=>{
+       this.unjoinedGroups=resp.result;
+       console.log(this.unjoinedGroups);
+       
+    })
+  }
+
   fetchExistingChats(){
     this.chatService.fetchExistingChats().subscribe((resp)=>{
       this.existingChats=resp.result;
       console.log(this.existingChats);
-      
     })
   }
 
   onClickingSend(){
     const tempMessage=this.messageForm.controls.message.value?.trim()!;
     if(this.is_group && this.currentChatId){
+       this.currentChat.push({message:tempMessage,sender_id:this.logged_in_id});
        this.sendToGroup(this.receiverName,tempMessage,this.currentChatId); 
+       this.messageForm.reset();
        return
     }
     if(this.currentChatId){
-      this.currentChat.push({message:tempMessage,sender_id:0});
+      this.currentChat.push({message:tempMessage,sender_id:this.logged_in_id});
       this.socketService.sendMessge(tempMessage,this.currentReceiver!,this.currentChatId);
       this.messageForm.reset();
    }
@@ -121,5 +132,15 @@ export class ChatComponent implements OnInit {
   sendToGroup(group_name:string,message:string,currentChatId:number){
     this.socketService.sendToGroup(group_name,message,currentChatId);
   }
+
+  joinGroupPersonally(group_name:string,chat_id:number){
+    this.chatService.joinGroupPersonally(group_name,chat_id).subscribe({
+      next:(resp)=>{
+        this.joinGroup(chat_id,group_name,[this.logged_in_id]);
+        alert(`Joined in ${group_name}`);
+      }
+    })
+  }
+
 
 }

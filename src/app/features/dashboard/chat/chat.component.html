@@ -2,7 +2,7 @@
     <div class="d-flex flex-column m-2 p-2" style="width:250px ">
         <div class="d-flex justify-content-between">
         <button class="btn btn-sm rounded-3 blueviolet mx-2" data-bs-toggle="modal" data-bs-target="#groupModal">Create group</button>
-        <button class="btn btn-sm rounded-3 blueviolet mx-2">Join group</button>
+        <button class="btn btn-sm rounded-3 blueviolet mx-2" data-bs-toggle="modal" data-bs-target="#joinGroup">Join group</button>
         </div>
         <button class="btn btn-sm rounded-3 blueviolet ms-2 my-2" data-bs-toggle="modal" data-bs-target="#viewUsers">New chat</button>
         <div class="d-flex flex-column ms-2 p-2">
@@ -19,7 +19,7 @@
         </div>
         <div class="flex-grow-1 overflow-auto p-2">
             <div class="d-flex flex-column" *ngFor="let message of currentChat">
-              <div [ngClass]="message.sender_id==currentReceiver? 'lefty' : 'righty'">
+              <div [ngClass]="message.sender_id!=logged_in_id? 'lefty' : 'righty'">
                 <p class="m-0 my-1 p-0 px-2 samachar ">
                     {{message.message}}
                 </p>
@@ -72,6 +72,9 @@
     </div>
   </div>
 
+
+
+
 <!-- create group modal  -->
 
   <div class="modal fade" id="groupModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -90,6 +93,40 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="createGroup()" [disabled]="groupForm.invalid">Create group</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- join group modal  -->
+
+  <div class="modal fade" id="joinGroup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Join group</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body overflow-x-hidden"  style="max-height:60vh;">
+          <table class="table table-light table-hover table-responsive">
+            <thead>
+              <tr>
+                <th scope="col">Group name</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let group of unjoinedGroups">
+                 <td>{{group.group_name}}</td>
+                 <td>
+                    <button class="btn btn-sm blueviolet" (click)="joinGroupPersonally(group.group_name,group.chat_id)">Join</button>
+                </td>
+               </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
